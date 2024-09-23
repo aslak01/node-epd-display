@@ -1,0 +1,24 @@
+{
+  "name": "bun-epd-display",
+  "module": "index.ts",
+  "main": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/yargs": "^17.0.33",
+    "bun-epd-display": "link:bun-epd-display",
+    "bun-types": "latest",
+    "canvas": "next",
+    "d3": "^7.9.0",
+    "prettier": "^3.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "bin": {
+    "epdd": "./index.ts"
+  },
+  "dependencies": {
+    "yargs": "^17.7.2"
+  }
+}
