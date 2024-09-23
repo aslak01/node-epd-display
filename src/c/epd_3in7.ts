@@ -1,9 +1,12 @@
 import { cc, ptr } from "bun:ffi";
 
+import devSource from "./DEV_Config.c" with { type: "file" };
+import epdSource from "./EPD_3in7.c" with { type: "file" };
+
 const {
   symbols: { DEV_Module_Init, DEV_Module_Exit },
 } = cc({
-  source: "./DEV_Config.c",
+  source: devSource,
   library: [],
   symbols: {
     DEV_Module_Exit: {
@@ -25,7 +28,7 @@ const {
     EPD_3IN7_Sleep,
   },
 } = cc({
-  source: "./EPD_3in7.c",
+  source: epdSource,
   library: [],
   symbols: {
     EPD_3IN7_4Gray_Display: {

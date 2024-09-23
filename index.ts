@@ -5,7 +5,7 @@ import { hideBin } from "yargs/helpers";
 
 import { drawChart } from "@/chart";
 import { convertImageForEPD } from "@/buffer/epd_buffer";
-import { display_buffer_on_epd } from "@/c/epd_3in7";
+// import { display_buffer_on_epd } from "@/c/epd_3in7";
 
 yargs(hideBin(process.argv))
   .command("preview", "Previews on a web server", async () => await preview())
@@ -40,5 +40,5 @@ async function display() {
   const width = 480;
   const height = 280;
   const epdBuffer = convertImageForEPD(chart, width, height);
-  display_buffer_on_epd(epdBuffer);
+  // display_buffer_on_epd(epdBuffer);
 }
