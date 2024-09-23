@@ -6,7 +6,7 @@
  * @returns {Uint8Array} The grayscale buffer
  */
 
-function convertToGrayscale(
+export function convertToGrayscale(
   rgbBuffer: Uint8Array,
   width: number,
   height: number,

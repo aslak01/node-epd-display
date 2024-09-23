@@ -1,12 +1,16 @@
 import { cc, ptr } from "bun:ffi";
 
 const {
-  symbols: { DEV_Module_Exit },
+  symbols: { DEV_Module_Init, DEV_Module_Exit },
 } = cc({
   source: "./DEV_Config.c",
   library: [],
   symbols: {
     DEV_Module_Exit: {
+      returns: "void",
+      args: [],
+    },
+    DEV_Module_Init: {
       returns: "void",
       args: [],
     },
@@ -43,10 +47,18 @@ const {
   },
 });
 
+export function display_buffer_on_epd(buffer: Uint8Array) {
+  EPD_3IN7_4Gray_Init();
+  EPD_3IN7_4Gray_Clear();
+  EPD_3IN7_4Gray_Display(buffer);
+  EPD_3IN7_Sleep;
+}
+
 export {
   EPD_3IN7_4Gray_Display,
   EPD_3IN7_4Gray_Init,
   EPD_3IN7_4Gray_Clear,
   EPD_3IN7_Sleep,
+  DEV_Module_Init,
   DEV_Module_Exit,
 };

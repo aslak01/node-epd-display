@@ -1,4 +1,4 @@
-import type { CanvasRenderingContext2D } from "canvas";
+import type { CanvasRenderingContext2D } from "skia-canvas";
 import type { Dimensions, Styles, YrTSData, DataPoint } from "@/chart/data";
 import * as d3 from "d3";
 import { getXScale, getYScale } from "./getScales";

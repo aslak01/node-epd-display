@@ -1,10 +1,10 @@
-import type { CanvasRenderingContext2D } from "canvas";
+import type { CanvasRenderingContext2D } from "skia-canvas";
 import { formatDateLegend } from "@/utils";
 import type { Dimensions, Styles, YrTSData } from "@/chart/data";
 import { getXScale } from "./getScales";
 
 export const drawTimeTicks = (
-  context: CanvasRenderingContext2D,
+  ctx: CanvasRenderingContext2D,
   data: YrTSData[],
   dimensions: Dimensions,
   style: Styles,
@@ -12,13 +12,13 @@ export const drawTimeTicks = (
   const xScale = getXScale(data, dimensions);
   const xTicks = xScale.ticks(5);
 
-  context.beginPath();
-  context.strokeStyle = style.tickColor;
-  context.lineWidth = style.tickWidth;
-  context.font = style.tickLabelFont;
-  context.fillStyle = style.tickLabelColor;
-  context.textAlign = "center";
-  context.textBaseline = "top";
+  ctx.beginPath();
+  ctx.strokeStyle = style.tickColor;
+  ctx.lineWidth = style.tickWidth;
+  ctx.font = style.tickLabelFont;
+  ctx.fillStyle = style.tickLabelColor;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
 
   const longTickTimes = [0, 6, 12, 18];
 
@@ -38,14 +38,10 @@ export const drawTimeTicks = (
 
     const x = xScale(tick);
 
-    context.moveTo(x, height - bottom);
-    context.lineTo(x, height - bottom + tickLength);
-    context.stroke();
-    context.fillText(
-      formatDateLegend(tick),
-      x,
-      height - bottom + tickLength + 2,
-    );
+    ctx.moveTo(x, height - bottom);
+    ctx.lineTo(x, height - bottom + tickLength);
+    ctx.stroke();
+    ctx.fillText(formatDateLegend(tick), x, height - bottom + tickLength + 2);
   }
 
   function drawLongTick(tick: Date, dimensions: Dimensions, style: Styles) {
@@ -55,10 +51,10 @@ export const drawTimeTicks = (
 
     const x = xScale(tick);
 
-    context.moveTo(x, top - bottom);
-    context.lineTo(x, height - bottom + tickLength);
-    context.stroke();
-    // context.fillText(
+    ctx.moveTo(x, top - bottom);
+    ctx.lineTo(x, height - bottom + tickLength);
+    ctx.stroke();
+    // ctx.fillText(
     // 	formatDateLegend(tick),
     // 	x,
     // 	height - bottom + tickLength + 2

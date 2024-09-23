@@ -1,4 +1,4 @@
-import type { CanvasRenderingContext2D } from "canvas";
+import type { CanvasRenderingContext2D } from "skia-canvas";
 import { formatDateLegend } from "@/utils";
 import type { Dimensions, Styles, YrTSData } from "@/chart/data";
 import { getXScale } from "./getScales";

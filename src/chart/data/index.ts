@@ -37,5 +37,5 @@ export type Styles = typeof style;
 
 export type DataPoint = { value: number } & YrTSData;
 
-import { getYrTimeseries, type YrTSData } from "./weather";
-export { getYrTimeseries, type YrTSData };
+import { getWeather, type YrTSData } from "./weather";
+export { getWeather, type YrTSData };

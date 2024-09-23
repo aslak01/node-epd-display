@@ -1,4 +1,5 @@
-import { createCanvas, Canvas } from "canvas";
+import type { CanvasRenderingContext2D } from "skia-canvas";
+import { createCanvas, type Canvas } from "@napi-rs/canvas";
 import { writeFile } from "fs/promises";
 import { createWriteStream } from "fs";
 
@@ -10,6 +11,8 @@ import { drawTransitInfo } from "./transit";
 
 import { multiplyNumberValues } from "@/utils";
 import type { ParsedDeparture } from "@/chart/data/transit";
+
+const dev = process.env.NODE_ENV === "development";
 
 const createChart = async (
   weatherData: YrTSData[],
@@ -24,7 +27,7 @@ const createChart = async (
   const styles = style;
 
   const canvas = createCanvas(dims.width, dims.height);
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d") as unknown as CanvasRenderingContext2D;
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -44,7 +47,9 @@ const createChartBuffer = async (
   style: Styles,
 ): Promise<Buffer> => {
   const chart = await createChart(weatherData, transitData, dimensions, style);
-  return chart.toBuffer("image/png");
+  const buffer = chart.toBuffer("image/png");
+
+  return buffer;
 };
 
 const saveBufferToPng = async (

@@ -1,8 +1,10 @@
-const convertImageForEPD = (
-  inputBuffer: Uint8Array,
+export function convertImageForEPD(
+  input: Buffer,
   width: number,
   height: number,
-) => {
+) {
+  const inputBuffer = new Uint8Array(input);
+
   if (inputBuffer.length !== width * height) {
     throw new Error("Input buffer size does not match specified dimensions");
   }
@@ -48,4 +50,4 @@ const convertImageForEPD = (
   }
 
   return outputBuffer;
-};
+}
