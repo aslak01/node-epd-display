@@ -4,6 +4,9 @@ export function convertImageForEPD(
   height: number,
 ) {
   const inputBuffer = new Uint8Array(input);
+  console.log("input length", input.length);
+  console.log("pixel dimensions", width, height, width * height);
+  console.log("input buffer legth ", inputBuffer.length);
 
   if (inputBuffer.length !== width * height) {
     throw new Error("Input buffer size does not match specified dimensions");

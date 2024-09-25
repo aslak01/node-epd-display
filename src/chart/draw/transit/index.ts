@@ -1,4 +1,4 @@
-import { loadImage } from "@napi-rs/canvas";
+import { loadImage, type Image } from "@napi-rs/canvas";
 import type { CanvasRenderingContext2D } from "skia-canvas";
 import type { Dimensions } from "@/chart/data";
 import type { ParsedDeparture } from "@/chart/data/transit";

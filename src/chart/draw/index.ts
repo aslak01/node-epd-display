@@ -1,12 +1,8 @@
 import type { CanvasRenderingContext2D } from "skia-canvas";
 import { createCanvas, type Canvas } from "@napi-rs/canvas";
-import { writeFile } from "fs/promises";
-import { createWriteStream } from "fs";
 
 import type { Dimensions, Styles, YrTSData } from "../data";
-import { drawRain } from "./weather/rain";
-import { drawTemps } from "./weather/temps";
-import { drawTimeTicks } from "./weather/time";
+import { drawRain, drawTemps, drawTimeTicks } from "./weather";
 import { drawTransitInfo } from "./transit";
 
 import { multiplyNumberValues } from "@/utils";
@@ -40,44 +36,12 @@ const createChart = async (
   return canvas;
 };
 
-const createChartBuffer = async (
+export async function createChartBuffer(
   weatherData: YrTSData[],
   transitData: ParsedDeparture[],
   dimensions: Dimensions,
   style: Styles,
-): Promise<Buffer> => {
+): Promise<Buffer> {
   const chart = await createChart(weatherData, transitData, dimensions, style);
-  const buffer = chart.toBuffer("image/png");
-
-  return buffer;
-};
-
-const saveBufferToPng = async (
-  buffer: Buffer,
-  filePath: string,
-): Promise<void> => {
-  try {
-    await writeFile(filePath, buffer);
-    console.log(`PNG file saved successfully to ${filePath}`);
-  } catch (error) {
-    console.error("Error saving PNG file:", error);
-  }
-};
-
-const createAndSaveChart = (
-  data: YrTSData[],
-  dimensions: Dimensions,
-  style: Styles,
-  outputPath: string,
-) => {
-  const chart = createChart(data, dimensions, style);
-  const out = createWriteStream(outputPath);
-  const stream = chart.createPNGStream();
-  stream.pipe(out);
-  return new Promise((resolve, reject) => {
-    out.on("finish", resolve);
-    out.on("error", reject);
-  });
-};
-
-export { createChartBuffer, saveBufferToPng };
+  return chart.toBuffer("image/png");
+}

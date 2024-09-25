@@ -4,8 +4,9 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import { drawChart } from "@/chart";
+import { dimensions } from "@/chart/data";
 import { convertImageForEPD } from "@/buffer/epd_buffer";
-// import { display_buffer_on_epd } from "@/c/epd_3in7";
+import { display_buffer_on_epd } from "@/c/epd_3in7";
 
 yargs(hideBin(process.argv))
   .command("preview", "Previews on a web server", async () => await preview())
@@ -17,12 +18,10 @@ yargs(hideBin(process.argv))
   .parse();
 
 async function preview() {
-  const port = 4555;
-  const chart = await drawChart();
-
-  Bun.serve({
-    port,
-    fetch(req) {
+  const server = Bun.serve({
+    port: 4333,
+    async fetch(req) {
+      const chart = await drawChart(req);
       return new Response(chart, {
         headers: {
           "Content-Type": "image/png",
@@ -32,13 +31,17 @@ async function preview() {
       });
     },
   });
-  console.log(`Preview running on ${port}`);
+
+  process.on("SIGINT", () => {
+    console.log("Ctrl-C was pressed");
+    process.exit();
+  });
+  console.log(`Preview running on ${server.url}`);
 }
 
 async function display() {
+  const { width, height } = dimensions;
   const chart = await drawChart();
-  const width = 480;
-  const height = 280;
   const epdBuffer = convertImageForEPD(chart, width, height);
-  // display_buffer_on_epd(epdBuffer);
+  display_buffer_on_epd(epdBuffer);
 }
