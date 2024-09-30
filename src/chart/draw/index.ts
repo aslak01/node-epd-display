@@ -16,9 +16,6 @@ const createChart = async (
   dimensions: Dimensions,
   style: Styles,
 ): Promise<Canvas> => {
-  // const ratio = dev ? 1 : 1;
-  // const dims = multiplyNumberValues(dimensions, ratio);
-  // const styles = multiplyNumberValues(style, ratio);
   const dims = dimensions;
   const styles = style;
 
@@ -44,4 +41,34 @@ export async function createChartBuffer(
 ): Promise<Buffer> {
   const chart = await createChart(weatherData, transitData, dimensions, style);
   return chart.toBuffer("image/png");
+}
+
+export async function createEpdBuffer(
+  weatherData: YrTSData[],
+  transitData: ParsedDeparture[],
+  dimensions: Dimensions,
+  style: Styles,
+) {
+  const { width, height } = dimensions;
+  const chart = await createChart(weatherData, transitData, dimensions, style);
+  const context = chart.getContext("2d");
+  const grayData = context.getImageData(0, 0, width, height);
+  const grayBuffer = new Uint8Array(width * height);
+
+  for (let i = 0, j = 0; i < grayData.data.length; i += 4, j++) {
+    const r = grayData.data[i];
+    const g = grayData.data[i + 1];
+    const b = grayData.data[i + 2];
+    grayBuffer[j] = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+  }
+
+  // Step 3: Convert grayscale to 4-bit (16 levels) for EPD
+  const epdBuffer = new Uint8Array(Math.ceil((width * height) / 2));
+  for (let i = 0, j = 0; i < grayBuffer.length; i += 2, j++) {
+    const pixel1 = Math.floor(grayBuffer[i] / 16); // Convert to 4-bit (0-15)
+    const pixel2 = Math.floor(grayBuffer[i + 1] / 16);
+    epdBuffer[j] = (pixel1 << 4) | pixel2; // Combine two 4-bit values into one byte
+  }
+
+  return epdBuffer;
 }
