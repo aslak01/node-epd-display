@@ -1,24 +1,6 @@
 import { cc, ptr } from "bun:ffi";
 
-import devSource from "./DEV_Config.c" with { type: "file" };
-import epdSource from "./EPD_3in7.c" with { type: "file" };
-
-const {
-  symbols: { DEV_Module_Init, DEV_Module_Exit },
-} = cc({
-  source: devSource,
-  library: [],
-  symbols: {
-    DEV_Module_Exit: {
-      returns: "void",
-      args: [],
-    },
-    DEV_Module_Init: {
-      returns: "void",
-      args: [],
-    },
-  },
-});
+import devSource from "./epd_3in7_includes.c" with { type: "file" };
 
 const {
   symbols: {
@@ -26,9 +8,11 @@ const {
     EPD_3IN7_4Gray_Init,
     EPD_3IN7_4Gray_Clear,
     EPD_3IN7_Sleep,
+    DEV_Module_Init,
+    DEV_Module_Exit,
   },
 } = cc({
-  source: epdSource,
+  source: devSource,
   library: [],
   symbols: {
     EPD_3IN7_4Gray_Display: {
@@ -44,6 +28,14 @@ const {
       args: [],
     },
     EPD_3IN7_Sleep: {
+      returns: "void",
+      args: [],
+    },
+    DEV_Module_Exit: {
+      returns: "void",
+      args: [],
+    },
+    DEV_Module_Init: {
       returns: "void",
       args: [],
     },
