@@ -6,7 +6,7 @@ import { hideBin } from "yargs/helpers";
 import { drawChart } from "@/chart";
 import { dimensions } from "@/chart/data";
 import { convertImageForEPD } from "@/buffer/epd_buffer";
-import { display_buffer_on_epd } from "@/c/epd_3in7";
+// import { display_buffer_on_epd } from "@/c/epd_3in7";
 import { shouldMock } from "@/utils/mock";
 
 yargs(hideBin(process.argv))
@@ -43,7 +43,7 @@ async function preview() {
 
 async function display() {
   const { width, height } = dimensions;
-  const chart = await drawChart();
+  const chart = await drawChart(await shouldMock());
   const epdBuffer = convertImageForEPD(chart, width, height);
-  display_buffer_on_epd(epdBuffer);
+  // display_buffer_on_epd(epdBuffer);
 }
