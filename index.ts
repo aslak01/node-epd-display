@@ -5,8 +5,8 @@ import { hideBin } from "yargs/helpers";
 
 import { displayChart, drawChart } from "@/chart";
 import { dimensions } from "@/chart/data";
-import { convertImageForEPD } from "@/buffer/epd_buffer";
-import { display_buffer_on_epd } from "@/c/epd_3in7";
+// import { convertImageForEPD } from "@/buffer/epd_buffer";
+import { clear_epd, display_buffer_on_epd } from "@/c/epd_3in7";
 import { shouldMock } from "@/utils/mock";
 
 yargs(hideBin(process.argv))
@@ -16,6 +16,7 @@ yargs(hideBin(process.argv))
     "Displays the rendering on the pi",
     async () => await display(),
   )
+  .command("clear", "Clears the screen", async () => await clear())
   .parse();
 
 async function preview() {
@@ -46,4 +47,8 @@ async function display() {
   const mock = await shouldMock();
   const chart = await displayChart(mock);
   display_buffer_on_epd(chart);
+}
+
+async function clear() {
+  clear_epd();
 }
