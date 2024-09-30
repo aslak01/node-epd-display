@@ -6,50 +6,28 @@ export function convertImageForEPD(
   const inputBuffer = new Uint8Array(input);
   console.log("input length", input.length);
   console.log("pixel dimensions", width, height, width * height);
-  console.log("input buffer legth ", inputBuffer.length);
+  console.log("input buffer length", inputBuffer.length);
 
-  if (inputBuffer.length !== width * height) {
-    throw new Error("Input buffer size does not match specified dimensions");
+  // Check if the input is already in the 4-bit grayscale format
+  if (inputBuffer.length === Math.ceil((width * height) / 2)) {
+    console.log("Input appears to be in 4-bit grayscale format already");
+    return inputBuffer;
   }
 
-  const outputSize = Math.ceil((width * height) / 4);
+  // If not, assume it's 8-bit grayscale and convert to 4-bit
+  if (inputBuffer.length !== width * height) {
+    throw new Error(
+      "Input buffer size does not match specified dimensions for 8-bit grayscale",
+    );
+  }
+
+  const outputSize = Math.ceil((width * height) / 2); // 4 bits per pixel
   const outputBuffer = new Uint8Array(outputSize);
 
-  let outputIndex = 0;
-  let outputByte = 0;
-  let pixelCount = 0;
-
-  for (let i = 0; i < inputBuffer.length; i++) {
-    // Get grayscale value (assuming input is already grayscale)
-    const grayValue = inputBuffer[i];
-
-    // Convert to 2-bit grayscale (4 levels)
-    let twoBitGray;
-    if (grayValue < 64)
-      twoBitGray = 0; // Black
-    else if (grayValue < 128)
-      twoBitGray = 1; // Dark Gray
-    else if (grayValue < 192)
-      twoBitGray = 2; // Light Gray
-    else twoBitGray = 3; // White
-
-    // Add to output byte
-    outputByte = (outputByte << 2) | twoBitGray;
-    pixelCount++;
-
-    // If we've processed 4 pixels, store the byte
-    if (pixelCount === 4) {
-      outputBuffer[outputIndex] = outputByte;
-      outputIndex++;
-      outputByte = 0;
-      pixelCount = 0;
-    }
-  }
-
-  // Handle any remaining pixels
-  if (pixelCount > 0) {
-    outputByte <<= (4 - pixelCount) * 2; // Shift to align with MSB
-    outputBuffer[outputIndex] = outputByte;
+  for (let i = 0; i < inputBuffer.length; i += 2) {
+    const pixel1 = inputBuffer[i] >> 4; // Convert 8-bit to 4-bit
+    const pixel2 = inputBuffer[i + 1] >> 4;
+    outputBuffer[i / 2] = (pixel1 << 4) | pixel2;
   }
 
   return outputBuffer;
