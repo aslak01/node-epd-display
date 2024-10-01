@@ -1,6 +1,6 @@
 import isOnline from "is-online";
 
-export async function shouldMock(requested: boolean) {
+export async function shouldMock(requested?: boolean) {
   if (requested) {
     return true;
   }

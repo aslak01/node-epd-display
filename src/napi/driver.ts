@@ -1,13 +1,13 @@
-import addon from "./build/Release/epd3in7.node";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const addon = require("../../build/Release/epd3in7.node");
 
-// Helper function to check if the input is a Uint8Array
 const validateImageBuffer = (imageBuffer: Uint8Array) => {
   if (!(imageBuffer instanceof Uint8Array)) {
     throw new TypeError("Image must be a Uint8Array");
   }
 };
 
-// Exposed functions
 const init = () => {
   const result = addon.init();
   if (result !== 0) {
@@ -37,7 +37,7 @@ const display1Gray = (imageBuffer: Uint8Array) => {
 
 const sleep = () => addon.sleep();
 
-module.exports = {
+export {
   init,
   exit,
   init4Gray,
