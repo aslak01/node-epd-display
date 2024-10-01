@@ -4,7 +4,7 @@
 * | Function    :   Drive SYSFS_ GPIO
 * | Info        :   Read and write /sys/class/gpio
 *----------------
-* |	This version:   V1.0
+* | This version:   V1.0
 * | Date        :   2019-06-04
 * | Info        :   Basic version
 *
@@ -28,7 +28,7 @@
 # THE SOFTWARE.
 #
 ******************************************************************************/
-#include "RPI_sysfs_gpio.h"
+#include "sysfs_gpio.h"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>

@@ -31,7 +31,7 @@
 #ifndef __SYSFS_SOFTWARE_SPI_
 #define __SYSFS_SOFTWARE_SPI_
 
-#include "RPI_sysfs_gpio.h"
+#include "sysfs_gpio.h"
 #include <stdint.h>
 #include <stdio.h>
 

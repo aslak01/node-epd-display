@@ -7,7 +7,7 @@
         "src/napi/EPD_3in7.c", 
         "src/napi/DEV_Config.c",
         "src/napi/dev_hardware_SPI.c",
-        "src/napi/RPI_sysfs_gpio.c",
+        "src/napi/sysfs_gpio.c",
         "src/napi/RPI_gpiod.c",
         "src/napi/sysfs_software_spi.c"
       ],
