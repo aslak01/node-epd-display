@@ -29,7 +29,13 @@
       "msvs_settings": {
         "VCCLCompilerTool": { "ExceptionHandling": 1 },
       },
-      "defines": ["NAPI_DISABLE_CPP_EXCEPTIONS"]
+      "defines": ["NAPI_DISABLE_CPP_EXCEPTIONS"],
+      "conditions": [
+        ['OS=="linux"', {
+          "cflags": ["-std=c11"],
+          "cflags_cc": ["-std=c++14"]
+        }]
+      ]
     }
   ]
 }
