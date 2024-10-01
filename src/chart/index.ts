@@ -17,7 +17,17 @@ export async function drawChart(mock: boolean) {
     throw new Error("no transit data");
   }
 
-  return await createChartBuffer(weatherData, transitData, dimensions, style);
+  try {
+    const buffer = await createChartBuffer(
+      weatherData,
+      transitData,
+      dimensions,
+      style,
+    );
+    return buffer;
+  } catch (err) {
+    throw new Error(`Couldn't create buffer: ${JSON.stringify(err)}`);
+  }
 }
 
 export async function displayChart(mock: boolean) {

@@ -15,8 +15,8 @@ export async function drawTransitInfo(
   ctx.fillStyle = "black";
   ctx.fillRect(0, height - ownHeight, width, ownHeight);
 
-  const trainI = await loadImage(import.meta.dir + "/train.png");
-  const busI = await loadImage(import.meta.dir + "/bus.png");
+  const trainI = await loadImage(import.meta.dirname + "/train.png");
+  const busI = await loadImage(import.meta.dirname + "/bus.png");
 
   const infoHeight = ownHeight * 0.8;
   const infoY = height - ownHeight + (ownHeight - infoHeight) / 2;

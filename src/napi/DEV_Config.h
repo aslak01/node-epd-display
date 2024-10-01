@@ -1,12 +1,12 @@
 /*****************************************************************************
-* | File      	:   DEV_Config.h
+* | File        :   DEV_Config.h
 * | Author      :   Waveshare team
 * | Function    :   Hardware underlying interface
 * | Info        :
 *                Used to shield the underlying layers of each master
 *                and enhance portability
 *----------------
-* |	This version:   V2.0
+* | This version:   V2.0
 * | Date        :   2018-10-30
 * | Info        :
 * 1.add:
@@ -62,8 +62,12 @@
     #elif USE_WIRINGPI_LIB
         #include <wiringPi.h>
         #include <wiringPiSPI.h>
+    #elif USE_LGPIO_LIB
+        #include <lgpio.h>
+        #define LFLAGS 0
+        #define NUM_MAXBUF  4
     #elif USE_DEV_LIB
-        #include "sysfs_gpio.h"
+        #include "RPI_gpiod.h"
         #include "dev_hardware_SPI.h"
     #endif
 #endif
@@ -92,6 +96,9 @@ extern int EPD_RST_PIN;
 extern int EPD_DC_PIN;
 extern int EPD_CS_PIN;
 extern int EPD_BUSY_PIN;
+extern int EPD_PWR_PIN;
+extern int EPD_MOSI_PIN;
+extern int EPD_SCLK_PIN;
 
 /*------------------------------------------------------------------------------------------------------*/
 void DEV_Digital_Write(UWORD Pin, UBYTE Value);
@@ -101,8 +108,13 @@ void DEV_SPI_WriteByte(UBYTE Value);
 void DEV_SPI_Write_nByte(uint8_t *pData, uint32_t Len);
 void DEV_Delay_ms(UDOUBLE xms);
 
+void DEV_SPI_SendData(UBYTE Reg);
+void DEV_SPI_SendnData(UBYTE *Reg);
+UBYTE DEV_SPI_ReadData();
+
 UBYTE DEV_Module_Init(void);
 void DEV_Module_Exit(void);
 
 
 #endif
+

@@ -43,10 +43,38 @@ const {
 });
 
 export function display_buffer_on_epd(buffer: Uint8Array) {
-  EPD_3IN7_4Gray_Init();
-  EPD_3IN7_4Gray_Clear();
-  EPD_3IN7_4Gray_Display(buffer);
-  EPD_3IN7_Sleep;
+  init_epd();
+  clear_epd();
+  display_4gray(buffer);
+  sleep_epd();
+}
+export function clear_epd() {
+  try {
+    EPD_3IN7_4Gray_Clear();
+  } catch (err) {
+    throw new Error(`Clearing EPD failed ${JSON.stringify(err)}`);
+  }
+}
+export function init_epd() {
+  try {
+    EPD_3IN7_4Gray_Init();
+  } catch (err) {
+    throw new Error(`Initialising EPD failed ${JSON.stringify(err)}`);
+  }
+}
+export function display_4gray(buffer: Uint8Array) {
+  try {
+    EPD_3IN7_4Gray_Display(buffer);
+  } catch (err) {
+    throw new Error(`Displaying buffer on EPD failed ${JSON.stringify(err)}`);
+  }
+}
+export function sleep_epd() {
+  try {
+    EPD_3IN7_Sleep();
+  } catch (err) {
+    throw new Error(`Putting EPD to sleep failed ${JSON.stringify(err)}`);
+  }
 }
 
 export {

@@ -4,7 +4,7 @@
 * | Function    :   Read and write /dev/SPI,  hardware SPI
 * | Info        :
 *----------------
-* |	This version:   V1.0
+* | This version:   V1.0
 * | Date        :   2019-06-26
 * | Info        :   Basic version
 *
@@ -40,30 +40,12 @@
 #define DEV_HARDWARE_SPI_Debug(__info,...)
 #endif
 
-#ifndef SPI_CPHA
 #define SPI_CPHA        0x01
-#endif
-
-#ifndef SPI_CPOL
 #define SPI_CPOL        0x02
-#endif
-
-#ifndef SPI_MODE_0
 #define SPI_MODE_0      (0|0)
-#endif
-
-#ifndef SPI_MODE_1
 #define SPI_MODE_1      (0|SPI_CPHA)
-#endif
-
-#ifndef SPI_MODE_2
 #define SPI_MODE_2      (SPI_CPOL|0)
-#endif
-
-#ifndef SPI_MODE_3
 #define SPI_MODE_3      (SPI_CPOL|SPI_CPHA)
-#endif
-
 
 typedef enum{
     SPI_MODE0 = SPI_MODE_0,  /*!< CPOL = 0, CPHA = 0 */
@@ -136,3 +118,4 @@ int DEV_HARDWARE_SPI_Mode(SPIMode mode);
 
 
 #endif
+

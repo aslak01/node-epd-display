@@ -5,7 +5,6 @@ import type { Dimensions, Styles, YrTSData } from "../data";
 import { drawRain, drawTemps, drawTimeTicks } from "./weather";
 import { drawTransitInfo } from "./transit";
 
-import { multiplyNumberValues } from "@/utils";
 import type { ParsedDeparture } from "@/chart/data/transit";
 
 const dev = process.env.NODE_ENV === "development";
@@ -29,6 +28,8 @@ const createChart = async (
   drawTemps(ctx, weatherData, dims, styles);
 
   await drawTransitInfo(ctx, transitData, dims);
+
+  console.log(canvas);
 
   return canvas;
 };
