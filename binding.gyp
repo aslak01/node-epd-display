@@ -37,7 +37,7 @@
         }]
       ],
       "libraries": [
-        "-lgpiod"
+        "-llgpio"
       ],
       "xcode_settings": {
         "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
