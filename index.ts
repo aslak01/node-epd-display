@@ -1,59 +1,44 @@
-#! /usr/bin/env bun
-
 import yargs from "yargs";
+import http from "node:http";
 import { hideBin } from "yargs/helpers";
+import { serve } from "@hono/node-server";
+import { Hono } from "hono";
 
 import { displayChart, drawChart } from "@/chart";
 import { dimensions } from "@/chart/data";
 // import { convertImageForEPD } from "@/buffer/epd_buffer";
-import { clear_epd, display_buffer_on_epd, init_epd } from "@/c/epd_3in7";
 import { shouldMock } from "@/utils/mock";
 
 yargs(hideBin(process.argv))
   .command("preview", "Previews on a web server", async () => await preview())
-  .command(
-    "display",
-    "Displays the rendering on the pi",
-    async () => await display(),
-  )
-  .command("clear", "Clears the screen", async () => await clear())
+  // .command(
+  //   "display",
+  //   "Displays the rendering on the pi",
+  //   async () => await display(),
+  // )
+  // .command("clear", "Clears the screen", async () => await clear())
   .parse();
 
 async function preview() {
-  const server = Bun.serve({
-    port: 4333,
-    async fetch(req) {
-      const mock = await shouldMock(req);
-      const chart = await drawChart(mock);
-      return new Response(chart, {
-        headers: {
-          "Content-Type": "image/png",
-          "Content-Disposition": 'inline; filename="chart.png"',
-        },
-        status: 200,
-      });
-    },
+  const port = 4333;
+  const app = new Hono();
+  app.get("/", async (ctx) => {
+    let chart;
+    try {
+      const mock = await shouldMock(!!ctx.req.query("mock"));
+      chart = await drawChart(mock);
+    } catch (err) {
+      console.error(JSON.stringify(err));
+    }
+    if (!chart) {
+      ctx.env.outgoing.writeHead(500);
+    }
+    ctx.env.outgoing.writeHead(200, {
+      "Content-Type": "image/png",
+      "Content-Disposition": 'inline; filename="chart.png"',
+    });
+    ctx.env.outgoing.end(chart);
   });
-
-  process.on("SIGINT", () => {
-    console.log("Ctrl-C was pressed");
-    process.exit();
-  });
-  console.log(`Preview running on ${server.url}`);
-}
-
-async function display() {
-  const { width, height } = dimensions;
-  const mock = await shouldMock();
-  const chart = await displayChart(mock);
-  display_buffer_on_epd(chart);
-}
-
-async function init() {
-  init_epd();
-}
-
-async function clear() {
-  init();
-  clear_epd();
+  serve(app);
+  console.log(`Server listening at http://localhost:${port}`);
 }
