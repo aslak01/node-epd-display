@@ -21,21 +21,24 @@
       "cflags_cc!": [ "-fno-exceptions" ],
       "cflags": ["-std=c11"],
       "cflags_cc": ["-std=c++14"],
+      "msvs_settings": {
+        "VCCLCompilerTool": { "ExceptionHandling": 1 },
+      },
+      "defines": ["NAPI_DISABLE_CPP_EXCEPTIONS", "RPI"],
+      "conditions": [
+        ['OS=="linux"', {
+          "defines": [
+            "USE_DEV_LIB"
+          ],
+          "cflags": ["-std=c11"],
+          "cflags_cc": ["-std=c++14"]
+        }]
+      ],
       "xcode_settings": {
         "GCC_ENABLE_CPP_EXCEPTIONS": "YES",
         "CLANG_CXX_LIBRARY": "libc++",
         "MACOSX_DEPLOYMENT_TARGET": "10.7"
       },
-      "msvs_settings": {
-        "VCCLCompilerTool": { "ExceptionHandling": 1 },
-      },
-      "defines": ["NAPI_DISABLE_CPP_EXCEPTIONS"],
-      "conditions": [
-        ['OS=="linux"', {
-          "cflags": ["-std=c11"],
-          "cflags_cc": ["-std=c++14"]
-        }]
-      ]
     }
   ]
 }
