@@ -1,6 +1,8 @@
 #include <napi.h>
-#include "EPD_3in7.h"
-#include "DEV_Config.h"
+extern "C" {
+  #include "EPD_3in7.h"
+  #include "DEV_Config.h"
+}
 
 Napi::Value Init(const Napi::CallbackInfo& info) {
     Napi::Env env = info.Env();
