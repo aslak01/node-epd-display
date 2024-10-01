@@ -30,7 +30,7 @@
       "conditions": [
         ['OS=="linux"', {
           "defines": [
-            "USE_DEV_LIB"
+            "USE_LGPIO_LIB"
           ],
           "cflags": ["-std=c11"],
           "cflags_cc": ["-std=c++14"]
