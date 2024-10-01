@@ -2,9 +2,10 @@
   "targets": [
     {
       "target_name": "epd3in7",
-      "sources": [ "src/napi/epd3in7_wrapper.cpp", "src/napi/EPD_3in7.c" ],
+      "sources": [ "src/napi/epd3in7_wrapper.cpp", "src/napi/EPD_3in7.c", "src/napi/DEV_Config.c" ],
       "include_dirs": [
-        "<!@(node -p \"require('node-addon-api').include\")"
+        "<!@(node -p \"require('node-addon-api').include\")",
+        "src"
       ],
       "dependencies": [
         "<!(node -p \"require('node-addon-api').gyp\")"
