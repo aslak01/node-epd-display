@@ -37,8 +37,16 @@ export function createEpdBuffer(
   dimensions: Dimensions,
 ): Uint8Array {
   const { width, height } = dimensions;
-  const context = chart.getContext("2d");
-  const imageData = context.getImageData(0, 0, width, height);
+
+  const rotatedCanvas = createCanvas(height, width);
+  const rotatedContext = rotatedCanvas.getContext("2d");
+
+  // Rotate 90 degrees clockwise
+  rotatedContext.translate(height, 0);
+  rotatedContext.rotate(Math.PI / 2);
+  rotatedContext.drawImage(chart, 0, 0);
+
+  const imageData = rotatedContext.getImageData(0, 0, height, width);
   const rgbaData = imageData.data;
 
   // The EPD buffer size is width * height / 2 (4-bit per pixel)
