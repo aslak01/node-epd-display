@@ -37,42 +37,45 @@ export function createEpdBuffer(
   dimensions: Dimensions,
 ): Uint8Array {
   const { width, height } = dimensions;
+  const context = chart.getContext("2d");
+  const imageData = context.getImageData(0, 0, width, height);
+  const rgbaData = imageData.data;
 
-  const rotatedCanvas = createCanvas(height, width);
-  const rotatedContext = rotatedCanvas.getContext("2d");
+  // The EPD buffer size is width * height / 2 (4-bit per pixel)
+  const epdBuffer = new Uint8Array((width * height) / 2);
 
-  // Rotate 90 degrees clockwise
-  rotatedContext.translate(height, 0);
-  rotatedContext.rotate(Math.PI / 2);
-  rotatedContext.drawImage(chart, 0, 0);
-
-  const rotatedImageData = rotatedContext.getImageData(0, 0, height, width);
-  const rgbaData = rotatedImageData.data;
-
-  // Convert RGBA to 4-bit grayscale
-  const epdBuffer = new Uint8Array(Math.ceil((height * width) / 2));
   let bufferIndex = 0;
+  for (let i = 0; i < width * height; i += 2) {
+    let temp3 = 0;
+    for (let j = 0; j < 2; j++) {
+      const pixelIndex = i + j;
+      const r = rgbaData[pixelIndex * 4];
+      const g = rgbaData[pixelIndex * 4 + 1];
+      const b = rgbaData[pixelIndex * 4 + 2];
 
-  for (let y = 0; y < width; y++) {
-    for (let x = 0; x < height; x++) {
-      const i = (y * height + x) * 4; // RGBA data index
-      const gray = Math.round(
-        0.299 * rgbaData[i] + 0.587 * rgbaData[i + 1] + 0.114 * rgbaData[i + 2],
-      );
-      const pixel = Math.floor(gray / 16); // Convert to 4-bit (0-15)
+      // Convert RGB to grayscale
+      const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
 
-      if (x % 2 === 0) {
-        epdBuffer[bufferIndex] = pixel << 4;
-      } else {
-        epdBuffer[bufferIndex] |= pixel;
-        bufferIndex++;
+      // Map grayscale to 4 levels
+      let temp2;
+      if (gray >= 192)
+        temp2 = 0xc0; // White
+      else if (gray >= 128)
+        temp2 = 0x80; // Light gray
+      else if (gray >= 64)
+        temp2 = 0x40; // Dark gray
+      else temp2 = 0x00; // Black
+
+      for (let k = 0; k < 2; k++) {
+        if (temp2 === 0xc0 || temp2 === 0x40) {
+          temp3 |= 0x01;
+        }
+        temp3 <<= 1;
+        temp2 <<= 2;
       }
     }
-
-    // Ensure we move to the next byte at the end of each row if height is odd
-    if (height % 2 !== 0) {
-      bufferIndex++;
-    }
+    temp3 >>= 1; // Adjust for the last shift
+    epdBuffer[bufferIndex++] = temp3;
   }
 
   return epdBuffer;
