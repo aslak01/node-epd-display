@@ -1,12 +1,10 @@
 import yargs from "yargs";
-import http from "node:http";
 import { hideBin } from "yargs/helpers";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 
-import { displayChart, drawChart } from "@/chart";
+import { drawChart } from "@/chart";
 import { dimensions } from "@/chart/data";
-// import { convertImageForEPD } from "@/buffer/epd_buffer";
 import { shouldMock } from "@/utils/mock";
 import * as epd from "@/epd_wrapper";
 import { convertImageForEPD } from "@/buffer/epd_buffer";
