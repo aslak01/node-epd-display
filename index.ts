@@ -82,6 +82,7 @@ function display_test() {
 
   console.log("EPD Buffer size:", epdBuf.length);
   console.log("First 10 bytes of EPD Buffer:", epdBuf.slice(0, 10));
+  console.log("Last 10 bytes of EPD Buffer:", epdBuf.slice(-10));
 
   console.log("initialising epd");
   epd.init();
