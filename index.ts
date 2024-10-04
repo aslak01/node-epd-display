@@ -52,15 +52,17 @@ async function preview() {
 }
 
 async function display() {
-  const mock = await shouldMock();
-  const chart = await drawChart(mock);
-  const epdBuf = createEpdBuffer(chart, dimensions);
-  console.log(epdBuf);
-
   if (!epd.isAvailable()) {
     console.log("EPD driver not available.");
     return;
   }
+  const mock = await shouldMock();
+  const chart = await drawChart(mock);
+  const epdBuf = createEpdBuffer(chart, dimensions);
+
+  console.log("EPD Buffer size:", epdBuf.length);
+  console.log("First 10 bytes of EPD Buffer:", epdBuf.slice(0, 10));
+
   console.log("initialising epd");
   epd.init();
   epd.init4Gray();
