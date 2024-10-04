@@ -1,4 +1,4 @@
-import { createChartBuffer } from "./draw";
+import { createChart } from "./draw";
 import { getTransports } from "./data/transit";
 import { getWeather } from "./data/weather";
 import { dimensions, style } from "./data";
@@ -18,7 +18,7 @@ export async function drawChart(mock: boolean) {
   }
 
   try {
-    const buffer = await createChartBuffer(
+    const buffer = await createChart(
       weatherData,
       transitData,
       dimensions,

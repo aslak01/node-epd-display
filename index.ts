@@ -8,6 +8,7 @@ import { dimensions } from "@/chart/data";
 import { shouldMock } from "@/utils/mock";
 import * as epd from "@/epd_wrapper";
 import { convertImageForEPD } from "@/buffer/epd_buffer";
+import { createEpdBuffer } from "@/chart/draw";
 
 yargs(hideBin(process.argv))
   .command("preview", "Previews on a web server", async () => await preview())
@@ -35,7 +36,7 @@ async function preview() {
       console.error("No chart");
       return ctx.text("No chart", 500);
     }
-    return new Response(chart, {
+    return new Response(chart.toBuffer("image/png"), {
       status: 200,
       headers: new Headers({
         "Content-Type": "image/png",
@@ -53,7 +54,7 @@ async function preview() {
 async function display() {
   const mock = await shouldMock();
   const chart = await drawChart(mock);
-  const epdBuf = convertImageForEPD(chart, dimensions);
+  const epdBuf = createEpdBuffer(chart, dimensions);
   console.log(chart);
   console.log(typeof chart);
   epd.init();

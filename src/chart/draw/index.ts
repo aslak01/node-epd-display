@@ -9,12 +9,12 @@ import type { ParsedDeparture } from "@/chart/data/transit";
 
 const dev = process.env.NODE_ENV === "development";
 
-const createChart = async (
+export async function createChart(
   weatherData: YrTSData[],
   transitData: ParsedDeparture[],
   dimensions: Dimensions,
   style: Styles,
-): Promise<Canvas> => {
+): Promise<Canvas> {
   const dims = dimensions;
   const styles = style;
 
@@ -29,45 +29,31 @@ const createChart = async (
 
   await drawTransitInfo(ctx, transitData, dims);
 
-  console.log(canvas);
-
   return canvas;
-};
-
-export async function createChartBuffer(
-  weatherData: YrTSData[],
-  transitData: ParsedDeparture[],
-  dimensions: Dimensions,
-  style: Styles,
-): Promise<Buffer> {
-  const chart = await createChart(weatherData, transitData, dimensions, style);
-  return chart.toBuffer("image/png");
 }
 
-export async function createEpdBuffer(
-  weatherData: YrTSData[],
-  transitData: ParsedDeparture[],
+export function createEpdBuffer(
+  chart: Canvas,
   dimensions: Dimensions,
-  style: Styles,
-) {
+): Uint8Array {
   const { width, height } = dimensions;
-  const chart = await createChart(weatherData, transitData, dimensions, style);
   const context = chart.getContext("2d");
-  const grayData = context.getImageData(0, 0, width, height);
-  const grayBuffer = new Uint8Array(width * height);
+  const imageData = context.getImageData(0, 0, width, height);
+  const rgbaData = imageData.data;
 
-  for (let i = 0, j = 0; i < grayData.data.length; i += 4, j++) {
-    const r = grayData.data[i];
-    const g = grayData.data[i + 1];
-    const b = grayData.data[i + 2];
-    grayBuffer[j] = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
-  }
-
-  // Step 3: Convert grayscale to 4-bit (16 levels) for EPD
+  // Convert RGBA to 4-bit grayscale
   const epdBuffer = new Uint8Array(Math.ceil((width * height) / 2));
-  for (let i = 0, j = 0; i < grayBuffer.length; i += 2, j++) {
-    const pixel1 = Math.floor(grayBuffer[i] / 16); // Convert to 4-bit (0-15)
-    const pixel2 = Math.floor(grayBuffer[i + 1] / 16);
+  for (let i = 0, j = 0; i < rgbaData.length; i += 8, j++) {
+    const gray1 = Math.round(
+      0.299 * rgbaData[i] + 0.587 * rgbaData[i + 1] + 0.114 * rgbaData[i + 2],
+    );
+    const gray2 = Math.round(
+      0.299 * rgbaData[i + 4] +
+      0.587 * rgbaData[i + 5] +
+      0.114 * rgbaData[i + 6],
+    );
+    const pixel1 = Math.floor(gray1 / 16); // Convert to 4-bit (0-15)
+    const pixel2 = Math.floor(gray2 / 16);
     epdBuffer[j] = (pixel1 << 4) | pixel2; // Combine two 4-bit values into one byte
   }
 
