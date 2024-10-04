@@ -37,9 +37,6 @@ export function createEpdBuffer(
   dimensions: Dimensions,
 ): Uint8Array {
   const { width, height } = dimensions;
-  const context = chart.getContext("2d");
-  const imageData = context.getImageData(0, 0, width, height);
-  const ogRgbData = imageData.data;
 
   const rotatedCanvas = createCanvas(height, width);
   const rotatedContext = rotatedCanvas.getContext("2d");
@@ -53,19 +50,29 @@ export function createEpdBuffer(
   const rgbaData = rotatedImageData.data;
 
   // Convert RGBA to 4-bit grayscale
-  const epdBuffer = new Uint8Array(Math.ceil((width * height) / 2));
-  for (let i = 0, j = 0; i < rgbaData.length; i += 8, j++) {
-    const gray1 = Math.round(
-      0.299 * rgbaData[i] + 0.587 * rgbaData[i + 1] + 0.114 * rgbaData[i + 2],
-    );
-    const gray2 = Math.round(
-      0.299 * rgbaData[i + 4] +
-      0.587 * rgbaData[i + 5] +
-      0.114 * rgbaData[i + 6],
-    );
-    const pixel1 = Math.floor(gray1 / 16); // Convert to 4-bit (0-15)
-    const pixel2 = Math.floor(gray2 / 16);
-    epdBuffer[j] = (pixel1 << 4) | pixel2; // Combine two 4-bit values into one byte
+  const epdBuffer = new Uint8Array(Math.ceil((height * width) / 2));
+  let bufferIndex = 0;
+
+  for (let y = 0; y < width; y++) {
+    for (let x = 0; x < height; x++) {
+      const i = (y * height + x) * 4; // RGBA data index
+      const gray = Math.round(
+        0.299 * rgbaData[i] + 0.587 * rgbaData[i + 1] + 0.114 * rgbaData[i + 2],
+      );
+      const pixel = Math.floor(gray / 16); // Convert to 4-bit (0-15)
+
+      if (x % 2 === 0) {
+        epdBuffer[bufferIndex] = pixel << 4;
+      } else {
+        epdBuffer[bufferIndex] |= pixel;
+        bufferIndex++;
+      }
+    }
+
+    // Ensure we move to the next byte at the end of each row if height is odd
+    if (height % 2 !== 0) {
+      bufferIndex++;
+    }
   }
 
   return epdBuffer;
