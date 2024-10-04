@@ -1,9 +1,9 @@
 export function convertImageForEPD(
   input: Buffer,
-  width: number,
-  height: number,
+  dims: { width: number; height: number },
 ) {
   const inputBuffer = new Uint8Array(input);
+  const { width, height } = dims;
   console.log("input length", input.length);
   console.log("pixel dimensions", width, height, width * height);
   console.log("input buffer length", inputBuffer.length);

@@ -9,6 +9,7 @@ import { dimensions } from "@/chart/data";
 // import { convertImageForEPD } from "@/buffer/epd_buffer";
 import { shouldMock } from "@/utils/mock";
 import * as epd from "@/epd_wrapper";
+import { convertImageForEPD } from "@/buffer/epd_buffer";
 
 yargs(hideBin(process.argv))
   .command("preview", "Previews on a web server", async () => await preview())
@@ -54,12 +55,13 @@ async function preview() {
 async function display() {
   const mock = await shouldMock();
   const chart = await drawChart(mock);
+  const epdBuf = convertImageForEPD(chart, dimensions);
   console.log(chart);
   console.log(typeof chart);
   epd.init();
   epd.init4Gray();
   epd.clear4Gray();
-  epd.display4Gray(chart);
+  epd.display4Gray(epdBuf);
   epd.sleep();
 }
 
