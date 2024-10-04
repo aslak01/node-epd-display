@@ -1,8 +1,7 @@
 let epdDriver: typeof import("@/napi/driver") | null = null;
 
 try {
-  // Only import the EPD driver if we're on a Raspberry Pi
-  if (process.platform === "linux" && process.arch === "arm") {
+  if (process.platform === "linux" && process.arch === "arm64") {
     epdDriver = await import("@/napi/driver");
   }
 } catch (error) {
