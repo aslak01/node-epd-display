@@ -37,52 +37,46 @@ export function createEpdBuffer(
   dimensions: Dimensions,
 ): Uint8Array {
   const { width, height } = dimensions;
-
-  const rotatedCanvas = createCanvas(height, width);
-  const rotatedContext = rotatedCanvas.getContext("2d");
-
-  // Rotate 90 degrees clockwise
-  rotatedContext.translate(height, 0);
-  rotatedContext.rotate(Math.PI / 2);
-  rotatedContext.drawImage(chart, 0, 0);
-
-  const imageData = rotatedContext.getImageData(0, 0, height, width);
+  const context = chart.getContext("2d");
+  const imageData = context.getImageData(0, 0, width, height);
   const rgbaData = imageData.data;
 
-  // The EPD buffer size is width * height / 2 (4-bit per pixel)
-  const epdBuffer = new Uint8Array((width * height) / 2);
+  // The EPD buffer size should be width * height / 4 (2 pixels per byte)
+  const epdBuffer = new Uint8Array((width * height) / 4);
 
   let bufferIndex = 0;
-  for (let i = 0; i < width * height; i += 2) {
+  for (let i = 0; i < width * height; i += 8) {
     let temp3 = 0;
     for (let j = 0; j < 2; j++) {
-      const pixelIndex = i + j;
-      const r = rgbaData[pixelIndex * 4];
-      const g = rgbaData[pixelIndex * 4 + 1];
-      const b = rgbaData[pixelIndex * 4 + 2];
-
-      // Convert RGB to grayscale
-      const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
-
-      // Map grayscale to 4 levels
-      let temp2;
-      if (gray >= 192)
-        temp2 = 0xc0; // White
-      else if (gray >= 128)
-        temp2 = 0x80; // Light gray
-      else if (gray >= 64)
-        temp2 = 0x40; // Dark gray
-      else temp2 = 0x00; // Black
-
       for (let k = 0; k < 2; k++) {
-        if (temp2 === 0xc0 || temp2 === 0x40) {
-          temp3 |= 0x01;
+        const pixelIndex = i + j * 4 + k * 2;
+        const r = rgbaData[pixelIndex * 4];
+        const g = rgbaData[pixelIndex * 4 + 1];
+        const b = rgbaData[pixelIndex * 4 + 2];
+
+        // Convert RGB to grayscale
+        const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+
+        // Map grayscale to 4 levels
+        let temp2;
+        if (gray >= 192)
+          temp2 = 0xc0; // White
+        else if (gray >= 128)
+          temp2 = 0x80; // Light gray
+        else if (gray >= 64)
+          temp2 = 0x40; // Dark gray
+        else temp2 = 0x00; // Black
+
+        if (temp2 === 0xc0) temp3 |= 0x03;
+        else if (temp2 === 0x80) temp3 |= 0x02;
+        else if (temp2 === 0x40) temp3 |= 0x01;
+        // If temp2 is 0x00, we don't need to do anything as temp3 is already 0
+
+        if (j !== 1 || k !== 1) {
+          temp3 <<= 2;
         }
-        temp3 <<= 1;
-        temp2 <<= 2;
       }
     }
-    temp3 >>= 1; // Adjust for the last shift
     epdBuffer[bufferIndex++] = temp3;
   }
 
