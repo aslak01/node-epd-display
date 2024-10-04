@@ -37,58 +37,51 @@ export function createEpdBuffer(
   dimensions: Dimensions,
 ): Uint8Array {
   const { width, height } = dimensions;
-  // const context = chart.getContext("2d");
-  // const imageData = context.getImageData(0, 0, width, height);
-  // const rgbaData = imageData.data;
 
+  // Create a new canvas for the rotated image
   const rotatedCanvas = createCanvas(height, width);
   const rotatedContext = rotatedCanvas.getContext("2d");
 
-  // Rotate 90 degrees clockwise
-  rotatedContext.translate(height, 0);
-  rotatedContext.rotate(Math.PI / 2);
+  // Rotate 90 degrees counterclockwise
+  rotatedContext.translate(0, width);
+  rotatedContext.rotate(-Math.PI / 2);
   rotatedContext.drawImage(chart, 0, 0);
 
   const imageData = rotatedContext.getImageData(0, 0, height, width);
   const rgbaData = imageData.data;
 
-  // The EPD buffer size should be width * height / 4 (2 pixels per byte)
-  const epdBuffer = new Uint8Array((width * height) / 4);
+  const bufferSize = Math.floor((width * height) / 4);
+  const epdBuffer = new Uint8Array(bufferSize);
 
-  let bufferIndex = 0;
-  for (let i = 0; i < width * height; i += 8) {
-    let temp3 = 0;
-    for (let j = 0; j < 2; j++) {
-      for (let k = 0; k < 2; k++) {
-        const pixelIndex = i + j * 4 + k * 2;
-        const r = rgbaData[pixelIndex * 4];
-        const g = rgbaData[pixelIndex * 4 + 1];
-        const b = rgbaData[pixelIndex * 4 + 2];
+  for (let y = 0; y < width; y++) {
+    for (let x = 0; x < height; x += 4) {
+      const bufferIndex = Math.floor((y * height + x) / 4);
+      let value = 0;
+
+      for (let i = 0; i < 4; i++) {
+        const pixelIndex = (y * height + x + i) * 4;
+        const r = rgbaData[pixelIndex];
+        const g = rgbaData[pixelIndex + 1];
+        const b = rgbaData[pixelIndex + 2];
 
         // Convert RGB to grayscale
         const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
 
-        // Map grayscale to 4 levels
-        let temp2;
+        // Map grayscale to 2 bits
+        let pixelValue;
         if (gray >= 192)
-          temp2 = 0xc0; // White
+          pixelValue = 3; // White
         else if (gray >= 128)
-          temp2 = 0x80; // Light gray
+          pixelValue = 2; // Light gray
         else if (gray >= 64)
-          temp2 = 0x40; // Dark gray
-        else temp2 = 0x00; // Black
+          pixelValue = 1; // Dark gray
+        else pixelValue = 0; // Black
 
-        if (temp2 === 0xc0) temp3 |= 0x03;
-        else if (temp2 === 0x80) temp3 |= 0x02;
-        else if (temp2 === 0x40) temp3 |= 0x01;
-        // If temp2 is 0x00, we don't need to do anything as temp3 is already 0
-
-        if (j !== 1 || k !== 1) {
-          temp3 <<= 2;
-        }
+        value |= pixelValue << (6 - i * 2);
       }
+
+      epdBuffer[bufferIndex] = value;
     }
-    epdBuffer[bufferIndex++] = temp3;
   }
 
   return epdBuffer;
@@ -96,31 +89,35 @@ export function createEpdBuffer(
 
 export function createEpdTestBuffer(dimensions: Dimensions): Uint8Array {
   const { width, height } = dimensions;
-
-  // The EPD buffer size should be width * height / 4 (2 pixels per byte)
-  const epdBuffer = new Uint8Array((width * height) / 4);
+  const bufferSize = Math.floor((width * height) / 4);
+  const epdBuffer = new Uint8Array(bufferSize);
 
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x += 4) {
-      const bufferIndex = (y * width + x) / 4;
+      const bufferIndex = Math.floor((y * width + x) / 4);
       let value = 0;
 
-      // Create a simple pattern:
-      // - Top left quarter: white (11)
-      // - Top right quarter: light gray (10)
-      // - Bottom left quarter: dark gray (01)
-      // - Bottom right quarter: black (00)
+      // Create a more distinctive pattern:
+      // - Top-left quarter: vertical stripes
+      // - Top-right quarter: horizontal stripes
+      // - Bottom-left quarter: diagonal stripes
+      // - Bottom-right quarter: checkerboard
+
       if (y < height / 2) {
         if (x < width / 2) {
-          value = 0xff; // 11 11 11 11
+          // Vertical stripes
+          value = x % 8 < 4 ? 0xff : 0x00;
         } else {
-          value = 0xaa; // 10 10 10 10
+          // Horizontal stripes
+          value = y % 8 < 4 ? 0xff : 0x00;
         }
       } else {
         if (x < width / 2) {
-          value = 0x55; // 01 01 01 01
+          // Diagonal stripes
+          value = (x + y) % 8 < 4 ? 0xff : 0x00;
         } else {
-          value = 0x00; // 00 00 00 00
+          // Checkerboard
+          value = (x / 4 + y) % 2 === 0 ? 0xff : 0x00;
         }
       }
 
