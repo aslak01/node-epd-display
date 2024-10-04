@@ -93,3 +93,40 @@ export function createEpdBuffer(
 
   return epdBuffer;
 }
+
+export function createEpdTestBuffer(dimensions: Dimensions): Uint8Array {
+  const { width, height } = dimensions;
+
+  // The EPD buffer size should be width * height / 4 (2 pixels per byte)
+  const epdBuffer = new Uint8Array((width * height) / 4);
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x += 4) {
+      const bufferIndex = (y * width + x) / 4;
+      let value = 0;
+
+      // Create a simple pattern:
+      // - Top left quarter: white (11)
+      // - Top right quarter: light gray (10)
+      // - Bottom left quarter: dark gray (01)
+      // - Bottom right quarter: black (00)
+      if (y < height / 2) {
+        if (x < width / 2) {
+          value = 0xff; // 11 11 11 11
+        } else {
+          value = 0xaa; // 10 10 10 10
+        }
+      } else {
+        if (x < width / 2) {
+          value = 0x55; // 01 01 01 01
+        } else {
+          value = 0x00; // 00 00 00 00
+        }
+      }
+
+      epdBuffer[bufferIndex] = value;
+    }
+  }
+
+  return epdBuffer;
+}
