@@ -8,7 +8,7 @@ import { displayChart, drawChart } from "@/chart";
 import { dimensions } from "@/chart/data";
 // import { convertImageForEPD } from "@/buffer/epd_buffer";
 import { shouldMock } from "@/utils/mock";
-import * as epd from "@/napi/driver";
+import * as epd from "@/epd_wrapper";
 
 yargs(hideBin(process.argv))
   .command("preview", "Previews on a web server", async () => await preview())
@@ -17,7 +17,7 @@ yargs(hideBin(process.argv))
     "Displays the rendering on the pi",
     async () => await display(),
   )
-  .command("clear", "Clears the screen", async () => await clear())
+  .command("clear", "Clears the screen", async () => clear())
   .parse();
 
 async function preview() {
@@ -30,19 +30,27 @@ async function preview() {
       chart = await drawChart(mock);
     } catch (err) {
       console.error(JSON.stringify(err));
+      return ctx.text("Error producing chart", 500);
     }
     if (!chart) {
-      ctx.env.outgoing.writeHead(500);
+      console.error("No chart");
+      return ctx.text("No chart", 500);
     }
-    ctx.env.outgoing.writeHead(200, {
-      "Content-Type": "image/png",
-      "Content-Disposition": 'inline; filename="chart.png"',
+    return new Response(chart, {
+      status: 200,
+      headers: new Headers({
+        "Content-Type": "image/png",
+        "Content-Disposition": 'inline; filename="chart.png"',
+      }),
     });
-    ctx.env.outgoing.end(chart);
   });
-  serve(app);
   console.log(`Server listening at http://localhost:${port}`);
+  serve({
+    fetch: app.fetch,
+    port,
+  });
 }
+
 async function display() {
   const mock = await shouldMock();
   const chart = await drawChart(mock);
