@@ -55,8 +55,13 @@ async function display() {
   const mock = await shouldMock();
   const chart = await drawChart(mock);
   const epdBuf = createEpdBuffer(chart, dimensions);
-  console.log(chart);
-  console.log(typeof chart);
+  console.log(epdBuf);
+
+  if (!epd.isAvailable()) {
+    console.log("EPD driver not available.");
+    return;
+  }
+  console.log("initialising epd");
   epd.init();
   epd.init4Gray();
   epd.clear4Gray();
