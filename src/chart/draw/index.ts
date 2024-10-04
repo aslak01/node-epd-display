@@ -39,7 +39,18 @@ export function createEpdBuffer(
   const { width, height } = dimensions;
   const context = chart.getContext("2d");
   const imageData = context.getImageData(0, 0, width, height);
-  const rgbaData = imageData.data;
+  const ogRgbData = imageData.data;
+
+  const rotatedCanvas = createCanvas(height, width);
+  const rotatedContext = rotatedCanvas.getContext("2d");
+
+  // Rotate 90 degrees clockwise
+  rotatedContext.translate(height, 0);
+  rotatedContext.rotate(Math.PI / 2);
+  rotatedContext.drawImage(chart, 0, 0);
+
+  const rotatedImageData = rotatedContext.getImageData(0, 0, height, width);
+  const rgbaData = rotatedImageData.data;
 
   // Convert RGBA to 4-bit grayscale
   const epdBuffer = new Uint8Array(Math.ceil((width * height) / 2));
