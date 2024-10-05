@@ -37,9 +37,9 @@ import { mockRawData } from "./mock";
 
 export async function getWeather(
   mock = false,
-  options = { lat: "59", lon: "11", hrs: 8 },
+  { lat = "59", lon = "11", hrs = 8 } = {},
 ) {
-  const { lat, lon, hrs } = options;
+  // const { lat, lon, hrs } = options;
   const response = mock ? mockRawData : await getYrData(lat, lon);
   const trimmedResponse = getNextNHrs(response, hrs);
   const tsData = getTSData(trimmedResponse);

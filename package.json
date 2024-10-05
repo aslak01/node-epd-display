@@ -2,6 +2,11 @@
   "name": "epd-display",
   "main": "index.ts",
   "type": "module",
+  "scripts": {
+    "preview": "tsx --env-file=.env ./index.ts preview",
+    "display": "tsx --env-file=.env ./index.ts display",
+    "clear": "tsx ./index.ts clear"
+  },
   "devDependencies": {
     "@napi-rs/canvas": "^0.1.56",
     "@types/d3": "^7.4.3",
@@ -11,17 +16,15 @@
     "is-online": "^11.0.0",
     "prettier": "^3.3.3",
     "skia-canvas": "^1.0.2",
-    "tsc": "^2.0.4",
     "tsx": "^4.19.1",
     "typescript": "^5.0.0",
-    "yargs": "^17.7.2"
-  },
-  "dependencies": {
+    "yargs": "^17.7.2",
     "@hono/node-server": "^1.13.1",
     "express": "^4.21.0",
     "hono": "^4.6.3",
     "node-addon-api": "^8.2.0",
     "node-gyp": "^10.2.0",
     "node-gyp-build": "^4.8.2"
-  }
+  },
+  "dependencies": {}
 }

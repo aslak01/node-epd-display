@@ -3,9 +3,12 @@ import { getTransports } from "./data/transit";
 import { getWeather } from "./data/weather";
 import { dimensions, style } from "./data";
 
+const lat = process.env.LAT || "11";
+const lon = process.env.LON || "60";
+
 export async function drawChart(mock: boolean) {
   const [weatherData, transitData] = await Promise.all([
-    getWeather(mock),
+    getWeather(mock, { lat, lon }),
     getTransports(mock),
   ]);
 

@@ -1,6 +1,6 @@
 export const dimensions = {
   width: 480,
-  height: 220,
+  height: 280,
   top: 20,
   right: 25,
   bottom: 30,
