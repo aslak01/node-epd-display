@@ -2,6 +2,11 @@
   "name": "epd-display",
   "main": "index.ts",
   "type": "module",
+  "scripts": {
+    "preview": "tsx --env-file=.env ./index.ts preview",
+    "display": "tsx --env-file=.env ./index.ts display",
+    "clear": "tsx ./index.ts clear"
+  },
   "devDependencies": {
     "@napi-rs/canvas": "^0.1.56",
     "@types/d3": "^7.4.3",
