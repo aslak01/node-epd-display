@@ -2,6 +2,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { html } from "hono/html";
 
 import { drawChart } from "@/chart";
 import { dimensions } from "@/chart/data";
@@ -26,6 +27,41 @@ async function preview() {
   const port = 4333;
   const app = new Hono();
   app.get("/", async (ctx) => {
+    let chart;
+    try {
+      const mock = await shouldMock(!!ctx.req.query("mock"));
+      chart = await drawChart(mock);
+    } catch (err) {
+      console.error(JSON.stringify(err));
+      return ctx.text("Error producing chart", 500);
+    }
+    if (!chart) {
+      console.error("No chart");
+      return ctx.text("No chart", 500);
+    }
+    return ctx.html(html`
+      <!doctype html>
+      <html>
+        <head>
+          <style>
+            :root {
+              color-scheme: light dark;
+            }
+            body {
+              color: light-dark(#333b3c, #efefec);
+              background-color: light-dark(#efedea, #232323);
+              display: flex;
+              justify-content: center;
+            }
+          </style>
+        </head>
+        <body>
+          <img src="/chart" />
+        </body>
+      </html>
+    `);
+  });
+  app.get("/chart", async (ctx) => {
     let chart;
     try {
       const mock = await shouldMock(!!ctx.req.query("mock"));
