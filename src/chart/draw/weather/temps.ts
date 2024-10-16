@@ -61,7 +61,7 @@ const drawEndCircles = (
     xScale(startPoint.date),
     yScale(startPoint.value),
     circleRadius,
-    startPoint.value.toFixed(0),
+    startPoint.value,
     style,
   );
 
@@ -70,7 +70,7 @@ const drawEndCircles = (
     xScale(endPoint.date),
     yScale(endPoint.value),
     circleRadius,
-    endPoint.value.toFixed(0),
+    endPoint.value,
     style,
   );
 };
@@ -80,20 +80,30 @@ const drawCircleWithText = (
   x: number,
   y: number,
   radius: number,
-  text: string,
+  value: number,
   style: Styles,
 ) => {
+  let bgCol = "black";
+  let textCol = "white";
+  let text = value.toFixed(0);
+  if (value < 1 && value > -1) {
+    text = "0";
+  }
+  if (value < 0) {
+    bgCol = "white";
+    textCol = "black";
+  }
   context.beginPath();
   context.arc(x, y, radius, 0, 2 * Math.PI);
-  context.fillStyle = style.circleColor || "white";
+  context.fillStyle = bgCol;
   context.fill();
-  context.strokeStyle = style.lineColor;
+  context.strokeStyle = textCol;
   context.lineWidth = 2;
   context.stroke();
 
-  context.fillStyle = style.textColor || "black";
+  context.fillStyle = textCol;
   context.font = "bold 20pt sans-serif";
   context.textAlign = "center";
   context.textBaseline = "middle";
-  context.fillText(text, x, y + 1);
+  context.fillText(text, x, y);
 };
