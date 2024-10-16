@@ -26,26 +26,26 @@ export async function drawTransitInfo(
 
   let x = padding;
   for (const item of transitData) {
+    const hasDelay = !!item.delayMinutes;
+
     const icon = item.type === "train" ? trainI : busI;
     ctx.drawImage(icon, x, infoY + padding - 5, iconSize, iconSize);
 
+    const fillCol = hasDelay ? "white" : "#aaa";
+
     ctx.font = "bold 20px sans-serif";
     ctx.textAlign = "left";
-    ctx.fillStyle = "white";
+    ctx.fillStyle = fillCol;
 
     x += iconSize + padding / 2;
 
-    const departureText = `${item.departureMinutes}`;
+    const delayText = hasDelay ? ` (+${item.delayMinutes})` : "";
+
+    const departureText = `${item.departureMinutes}${delayText}`;
     const departureWidth = ctx.measureText(departureText).width;
     ctx.fillText(departureText, x, infoY + verticalPadding);
 
     x += departureWidth + padding / 2;
-    if (item.delayMinutes) {
-      const delayText = `(+${item.delayMinutes})`;
-      const delayWidth = ctx.measureText(delayText).width;
-      ctx.fillText(delayText, x, infoY + verticalPadding);
-      x += delayWidth;
-    }
 
     x += padding;
   }
