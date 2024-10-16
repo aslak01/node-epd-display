@@ -3,8 +3,9 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "preview": "tsx --env-file=.env ./index.ts preview",
-    "display": "tsx --env-file=.env ./index.ts display",
+    "preview": "tsx --env-file=.env index.ts preview",
+    "dev": "tsx watch --env-file=.env index.ts preview",
+    "display": "tsx --env-file=.env index.ts display",
     "clear": "tsx ./index.ts clear"
   },
   "devDependencies": {
