@@ -3,6 +3,8 @@ import type { YrTSData, DataPoint } from "@/chart/data";
 import type { Dimensions, Styles } from "@/chart/draw/visual-settings";
 import * as d3 from "d3";
 import { getXScale, getYScale } from "./getScales";
+import { GlobalFonts } from "@napi-rs/canvas";
+import path from "path";
 
 export function drawTemps(
   context: CanvasRenderingContext2D,
@@ -55,7 +57,7 @@ const drawEndCircles = (
 ) => {
   const startPoint = data[0];
   const endPoint = data[data.length - 1];
-  const circleRadius = 20;
+  const circleRadius = 33;
 
   drawCircleWithText(
     context,
@@ -94,6 +96,12 @@ const drawCircleWithText = (
     bgCol = "white";
     textCol = "black";
   }
+
+  GlobalFonts.registerFromPath(
+    path.join(import.meta.dirname, "..", "..", "fonts", style.font),
+    "Inter",
+  );
+
   context.beginPath();
   context.arc(x, y, radius, 0, 2 * Math.PI);
   context.fillStyle = bgCol;
@@ -103,7 +111,7 @@ const drawCircleWithText = (
   context.stroke();
 
   context.fillStyle = textCol;
-  context.font = "bold 20pt sans-serif";
+  context.font = "bold 30pt Inter";
   context.textAlign = "center";
   context.textBaseline = "middle";
   context.fillText(text, x, y);
