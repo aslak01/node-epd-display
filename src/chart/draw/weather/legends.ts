@@ -1,6 +1,7 @@
 import type { CanvasRenderingContext2D } from "skia-canvas";
 import { formatDateLegend } from "@/utils";
-import type { Dimensions, Styles, YrTSData } from "@/chart/data";
+import type { YrTSData } from "@/chart/data";
+import type { Dimensions, Styles } from "@/chart/draw/visual-settings";
 import { getXScale } from "./getScales";
 
 export const drawTimeTicks = (

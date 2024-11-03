@@ -1,7 +1,8 @@
 import { loadImage, type Image } from "@napi-rs/canvas";
-import type { CanvasRenderingContext2D } from "skia-canvas";
-import type { Dimensions } from "@/chart/data";
+import type { CanvasImageSource, CanvasRenderingContext2D } from "skia-canvas";
+import type { Dimensions } from "@/chart/draw/visual-settings";
 import type { ParsedDeparture } from "@/chart/data/transit";
+import path from "node:path";
 
 export async function drawTransitInfo(
   ctx: CanvasRenderingContext2D,
@@ -15,8 +16,8 @@ export async function drawTransitInfo(
   ctx.fillStyle = "black";
   ctx.fillRect(0, height - ownHeight, width, ownHeight);
 
-  const trainI = await loadImage(import.meta.dirname + "/train.png");
-  const busI = await loadImage(import.meta.dirname + "/bus.png");
+  const trainI = await loadImage(path.join(import.meta.dirname, "/train.png"));
+  const busI = await loadImage(path.join(import.meta.dirname, "/bus.png"));
 
   const infoHeight = ownHeight * 0.8;
   const infoY = height - ownHeight + (ownHeight - infoHeight) / 2;
@@ -28,7 +29,7 @@ export async function drawTransitInfo(
   for (const item of transitData) {
     const hasDelay = !!item.delayMinutes;
 
-    const icon = item.type === "train" ? trainI : busI;
+    const icon: CanvasImageSource = item.type === "train" ? trainI : busI;
     ctx.drawImage(icon, x, infoY + padding - 5, iconSize, iconSize);
 
     const fillCol = hasDelay ? "white" : "#aaa";

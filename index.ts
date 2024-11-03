@@ -6,7 +6,7 @@ import { html } from "hono/html";
 import { HTTPException } from "hono/http-exception";
 
 import { drawChart } from "@/chart";
-import { dimensions } from "@/chart/data";
+import { dimensions } from "@/chart/draw/visual-settings";
 import { shouldMock } from "@/utils/mock";
 import * as epd from "@/epd_wrapper";
 import { createEpdBuffer, createEpdTestBuffer } from "@/chart/draw";

@@ -1,7 +1,7 @@
 import { createChart } from "./draw";
 import { getTransports } from "./data/transit";
 import { getWeather } from "./data/weather";
-import { dimensions, style } from "./data";
+import { dimensions, style } from "./draw/visual-settings";
 
 const lat = process.env.LAT || "11";
 const lon = process.env.LON || "60";

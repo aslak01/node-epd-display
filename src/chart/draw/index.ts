@@ -1,7 +1,9 @@
 import type { CanvasRenderingContext2D } from "skia-canvas";
 import { createCanvas, type Canvas } from "@napi-rs/canvas";
 
-import type { Dimensions, Styles, YrTSData } from "../data";
+import type { YrTSData } from "../data";
+import type { Dimensions, Styles } from "./visual-settings";
+
 import { drawRain, drawTemps, drawTimeTicks } from "./weather";
 import { drawTransitInfo } from "./transit";
 
@@ -19,6 +21,8 @@ export async function createChart(
   const styles = style;
 
   const canvas = createCanvas(dims.width, dims.height);
+
+  // overwriting native canvas types
   const ctx = canvas.getContext("2d") as unknown as CanvasRenderingContext2D;
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -27,7 +31,7 @@ export async function createChart(
   drawRain(ctx, weatherData, dims, styles);
   drawTemps(ctx, weatherData, dims, styles);
 
-  await drawTransitInfo(ctx, transitData, dims);
+  await drawTransitInfo(ctx, transitData, dims, styles);
 
   return canvas;
 }

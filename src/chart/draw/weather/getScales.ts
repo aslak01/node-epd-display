@@ -1,4 +1,5 @@
-import type { Dimensions, YrTSData, DataPoint } from "@/chart/data";
+import type { YrTSData, DataPoint } from "@/chart/data";
+import type { Dimensions } from "@/chart/draw/visual-settings";
 import { isTruthy } from "@/utils";
 import * as d3 from "d3";
 
