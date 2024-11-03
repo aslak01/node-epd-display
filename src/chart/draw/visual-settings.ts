@@ -12,6 +12,8 @@ export const dimensions = {
 export type Dimensions = typeof dimensions;
 
 export const style = {
+  font: "InterDisplay-Bold.woff2",
+  boldFont: "InterDisplay-Black.woff2",
   lineColor: "#000",
   axisColor: "#000",
   labelColor: "#333",
