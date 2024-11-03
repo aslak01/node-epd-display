@@ -5,8 +5,8 @@ export const dimensions = {
   right: 25,
   bottom: 30,
   left: 40,
-  weatherHeight: 280 * 0.7,
-  transitHeight: 280 * 0.3,
+  weatherHeight: 280 * 0.73,
+  transitHeight: 280 * 0.27,
 };
 
 export type Dimensions = typeof dimensions;

@@ -57,7 +57,7 @@ const drawEndCircles = (
 ) => {
   const startPoint = data[0];
   const endPoint = data[data.length - 1];
-  const circleRadius = 33;
+  const circleRadius = 35;
 
   drawCircleWithText(
     context,
@@ -70,7 +70,7 @@ const drawEndCircles = (
 
   drawCircleWithText(
     context,
-    xScale(endPoint.date),
+    xScale(endPoint.date) - 10,
     yScale(endPoint.value),
     circleRadius,
     endPoint.value,
@@ -98,7 +98,7 @@ const drawCircleWithText = (
   }
 
   GlobalFonts.registerFromPath(
-    path.join(import.meta.dirname, "..", "..", "fonts", style.font),
+    path.join(import.meta.dirname, "..", "..", "fonts", style.boldFont),
     "Inter",
   );
 
@@ -111,7 +111,7 @@ const drawCircleWithText = (
   context.stroke();
 
   context.fillStyle = textCol;
-  context.font = "bold 30pt Inter";
+  context.font = "bold 50px Inter";
   context.textAlign = "center";
   context.textBaseline = "middle";
   context.fillText(text, x, y);

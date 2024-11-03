@@ -32,7 +32,7 @@ export async function drawTransitInfo(
 
   const ownHeight = transitHeight;
   const infoHeight = ownHeight;
-  const infoY = height - ownHeight + (ownHeight - infoHeight) / 2;
+  const infoY = height - ownHeight;
   const iconSize = 50;
   const padding = 10;
   const verticalPadding = padding * 2.3;
@@ -40,11 +40,12 @@ export async function drawTransitInfo(
 
   let x = padding;
 
+  ctx.font = "bold 40px Inter";
+
   for (const item of transitData) {
     const hasDelay = !!item.delayMinutes;
 
     // Calculate text dimensions
-    ctx.font = "bold 35px Inter";
     const delayText = hasDelay ? ` (+${item.delayMinutes})` : "";
     const departureText = `${item.departureMinutes}${delayText}`;
     const departureWidth = ctx.measureText(departureText).width;
@@ -70,8 +71,6 @@ export async function drawTransitInfo(
       ctx.fill();
     }
     ctx.drawImage(icon, x, infoY + padding - 5, iconSize, iconSize);
-
-    // Draw icon
 
     // Draw text
     const textColor = hasDelay ? "white" : "black";
