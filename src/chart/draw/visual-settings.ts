@@ -3,10 +3,10 @@ export const dimensions = {
   height: 280,
   top: 20,
   right: 25,
-  bottom: 30,
+  bottom: 20,
   left: 40,
-  weatherHeight: 280 * 0.73,
-  transitHeight: 280 * 0.27,
+  weatherHeight: 280 * 0.85,
+  transitHeight: 280 * 0.2,
 };
 
 export type Dimensions = typeof dimensions;
