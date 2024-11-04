@@ -2,7 +2,7 @@ import {
   Convert,
   type EstimatedCall,
   type RawEnturData,
-} from "./enturQuicktype";
+} from "./enturQuicktype.ts";
 
 const enturQuery = `{
 stopPlaces(ids: ["NSR:StopPlace:60737", "NSR:StopPlace:3272"]) {
@@ -57,7 +57,7 @@ function validateEnturResponse(data: string): RawEnturData {
   }
 }
 
-import { mockTransportData } from "./mock";
+import { mockTransportData } from "./mock.ts";
 
 export async function getTransports(mock = false): Promise<ParsedDeparture[]> {
   if (mock) return mockTransportData.slice(0, 5);

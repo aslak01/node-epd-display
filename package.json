@@ -3,10 +3,10 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "preview": "tsx --env-file=.env index.ts preview",
-    "dev": "tsx watch --env-file=.env index.ts preview",
-    "display": "tsx --env-file=.env index.ts display",
-    "clear": "tsx ./index.ts clear"
+    "preview": "node --env-file=.env --experimental-transform-types index.ts preview",
+    "dev": "node --env-file=.env --experimental-transform-types --watch index.ts preview",
+    "display": "node --env-file=.env --experimental-transform-types index.ts display",
+    "clear": "node --experimental-transform-types index.ts clear"
   },
   "devDependencies": {
     "@napi-rs/canvas": "^0.1",
@@ -17,7 +17,6 @@
     "is-online": "^11",
     "prettier": "^3",
     "skia-canvas": "^1",
-    "tsx": "^4",
     "typescript": "^5",
     "yargs": "^17",
     "@hono/node-server": "^1",
@@ -25,6 +24,5 @@
     "node-addon-api": "^8",
     "node-gyp": "^10",
     "node-gyp-build": "^4"
-  },
-  "dependencies": {}
+  }
 }

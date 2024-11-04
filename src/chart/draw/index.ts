@@ -1,13 +1,13 @@
 import type { CanvasRenderingContext2D } from "skia-canvas";
 import { createCanvas, type Canvas } from "@napi-rs/canvas";
 
-import type { YrTSData } from "../data";
-import type { Dimensions, Styles } from "./visual-settings";
+import type { YrTSData } from "../data/index.ts";
+import type { Dimensions, Styles } from "./visual-settings.ts";
 
-import { drawRain, drawTemps, drawTimeTicks } from "./weather";
-import { drawTransitInfo } from "./transit";
+import { drawRain, drawTemps, drawTimeTicks } from "./weather/index.ts";
+import { drawTransitInfo } from "./transit/index.ts";
 
-import type { ParsedDeparture } from "@/chart/data/transit";
+import type { ParsedDeparture } from "../data/transit/index.ts";
 
 const dev = process.env.NODE_ENV === "development";
 

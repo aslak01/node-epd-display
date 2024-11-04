@@ -1,4 +1,4 @@
-import { Convert, type Timesery } from "./yrQuicktype";
+import { Convert, type Timesery } from "./yrQuicktype.ts";
 
 async function getYrData(lat: string, lon: string): Promise<Timesery[]> {
   const req = await fetch(
@@ -33,7 +33,7 @@ function getTSData(w: Timesery[]): YrTSData[] {
   }));
 }
 
-import { mockRawData } from "./mock";
+import { mockRawData } from "./mock.ts";
 
 export async function getWeather(
   mock = false,

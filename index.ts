@@ -5,11 +5,14 @@ import { Hono } from "hono";
 import { html } from "hono/html";
 import { HTTPException } from "hono/http-exception";
 
-import { drawChart } from "@/chart";
-import { dimensions } from "@/chart/draw/visual-settings";
-import { shouldMock } from "@/utils/mock";
-import * as epd from "@/epd_wrapper";
-import { createEpdBuffer, createEpdTestBuffer } from "@/chart/draw";
+import { drawChart } from "./src/chart/index.ts";
+import { dimensions } from "./src/chart/draw/visual-settings.ts";
+import { shouldMock } from "./src/utils/mock.ts";
+import * as epd from "./src/epd_wrapper.ts";
+import {
+  createEpdBuffer,
+  createEpdTestBuffer,
+} from "./src/chart/draw/index.ts";
 
 yargs(hideBin(process.argv))
   .command("preview", "Previews on a web server", async () => await preview())

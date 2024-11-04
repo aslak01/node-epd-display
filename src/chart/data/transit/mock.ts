@@ -1,4 +1,4 @@
-import type { ParsedDeparture } from ".";
+import type { ParsedDeparture } from "./index.ts";
 
 export const mockTransportData: ParsedDeparture[] = [
   {

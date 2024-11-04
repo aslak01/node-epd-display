@@ -1,8 +1,8 @@
 import { type CanvasRenderingContext2D } from "skia-canvas";
-import type { YrTSData, DataPoint } from "@/chart/data";
-import type { Dimensions, Styles } from "@/chart/draw/visual-settings";
+import type { YrTSData, DataPoint } from "../../data/index.ts";
+import type { Dimensions, Styles } from "../visual-settings.ts";
 import * as d3 from "d3";
-import { getXScale, getYScale } from "./getScales";
+import { getXScale, getYScale } from "./getScales.ts";
 
 export function drawRain(
   context: CanvasRenderingContext2D,

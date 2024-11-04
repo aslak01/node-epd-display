@@ -1,5 +1,5 @@
-import { drawRain } from "./rain";
-import { drawTemps } from "./temps";
-import { drawTimeTicks } from "./time";
+import { drawRain } from "./rain.ts";
+import { drawTemps } from "./temps.ts";
+import { drawTimeTicks } from "./time.ts";
 
 export { drawRain, drawTemps, drawTimeTicks };

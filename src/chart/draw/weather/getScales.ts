@@ -1,6 +1,6 @@
-import type { YrTSData, DataPoint } from "@/chart/data";
-import type { Dimensions } from "@/chart/draw/visual-settings";
-import { isTruthy } from "@/utils";
+import type { YrTSData, DataPoint } from "../../data/index.ts";
+import type { Dimensions } from "../visual-settings.ts";
+import { isTruthy } from "../../../utils/index.ts";
 import * as d3 from "d3";
 
 export function getXScale(data: YrTSData[], dimensions: Dimensions) {

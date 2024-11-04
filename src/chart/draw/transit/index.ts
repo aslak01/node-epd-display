@@ -1,7 +1,7 @@
 import { loadImage, GlobalFonts } from "@napi-rs/canvas";
 import type { CanvasRenderingContext2D } from "skia-canvas";
-import type { Dimensions, Styles } from "@/chart/draw/visual-settings";
-import type { ParsedDeparture } from "@/chart/data/transit";
+import type { Dimensions, Styles } from "../visual-settings.ts";
+import type { ParsedDeparture } from "../../data/transit/index.ts";
 import path from "node:path";
 
 export async function drawTransitInfo(
