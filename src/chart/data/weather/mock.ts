@@ -9,7 +9,7 @@ export const mockRawData = [
       instant: {
         details: {
           air_pressure_at_sea_level: 992,
-          air_temperature: 15.5,
+          air_temperature: -22,
           cloud_area_fraction: 100,
           relative_humidity: 79.2,
           wind_from_direction: 221.4,
@@ -36,7 +36,7 @@ export const mockRawData = [
       instant: {
         details: {
           air_pressure_at_sea_level: 992,
-          air_temperature: 15.5,
+          air_temperature: -22,
           cloud_area_fraction: 100,
           relative_humidity: 79.2,
           wind_from_direction: 221.4,

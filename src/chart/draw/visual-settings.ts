@@ -19,7 +19,7 @@ export const style = {
   labelColor: "#333",
   lineWidth: 4,
   axisWidth: 1,
-  labelFont: "12px sans-serif",
+  labelFont: "15px Inter",
   barColor: "#666",
   barWidth: 40,
   tickColor: "#000",

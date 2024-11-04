@@ -86,8 +86,8 @@ const drawCircleWithText = (
   value: number,
   style: Styles,
 ) => {
-  let bgCol = "black";
-  let textCol = "white";
+  let bgCol = value > 0 ? "black" : "white";
+  let textCol = value > 0 ? "white" : "black";
   let text = value.toFixed(0);
   if (value < 1 && value > -1) {
     text = "0";
@@ -107,7 +107,7 @@ const drawCircleWithText = (
   context.fillStyle = bgCol;
   context.fill();
   context.strokeStyle = textCol;
-  context.lineWidth = 2;
+  context.lineWidth = 5;
   context.stroke();
 
   context.fillStyle = textCol;
