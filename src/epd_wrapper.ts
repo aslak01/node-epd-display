@@ -1,8 +1,8 @@
-let epdDriver: typeof import("@/napi/driver") | null = null;
+let epdDriver: typeof import("./napi/driver.ts") | null = null;
 
 try {
   if (process.platform === "linux" && process.arch === "arm64") {
-    epdDriver = await import("@/napi/driver");
+    epdDriver = await import("./napi/driver.ts");
   }
 } catch (error) {
   console.warn("EPD driver not available. Running in preview mode.");
