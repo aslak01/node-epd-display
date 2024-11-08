@@ -12,7 +12,7 @@ export const dimensions = {
 export const COLORS = {
   white: "#ffffff",
   lgrey: "#a0a0a0",
-  dgrey: "#808080",
+  dgrey: "#4d4d4d",
   black: "#000000",
 } as const;
 
