@@ -49,11 +49,12 @@ export async function drawTransitInfo(
 
   for (const item of transitData) {
     const hasDelay = !!item.delayMinutes;
+    const delay = item.delayMinutes || 0;
 
-    const colorScheme = getColorScheme(item.delayMinutes || 0);
+    const colorScheme = getColorScheme(delay);
 
-    const delayText = hasDelay ? ` (+${item.delayMinutes})` : "";
-    const departureText = `${item.departureMinutes}${delayText}`;
+    const delayText = delay > 5 ? `(+${item.delayMinutes})` : "";
+    const departureText = `${item.departureMinutes} ${delayText}`;
     const departureWidth = ctx.measureText(departureText).width;
 
     // Calculate background rectangle dimensions
