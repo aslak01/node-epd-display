@@ -86,24 +86,20 @@ const drawCircleWithText = (
   value: number,
   style: Styles,
 ) => {
-  let bgCol = value > 0 ? "black" : "white";
-  let textCol = value > 0 ? "white" : "black";
-  let text = value.toFixed(0);
+  let text = Math.abs(value).toFixed(0);
   if (value < 1 && value > -1) {
     text = "0";
   }
-  if (value < 0) {
-    bgCol = "white";
-    textCol = "black";
-  }
 
-  GlobalFonts.registerFromPath(
-    path.join(import.meta.dirname, "..", "..", "fonts", style.boldFont),
-    "Inter",
-  );
+  let bgCol = value > 0 ? "black" : "white";
+  let textCol = value > 0 ? "white" : "black";
+
+  context.font = "bold 50px Inter";
+  const metrics = context.measureText(text);
+  const dynamicRadius = Math.max(radius, metrics.width / 2 + 10);
 
   context.beginPath();
-  context.arc(x, y, radius, 0, 2 * Math.PI);
+  context.arc(x, y, dynamicRadius, 0, 2 * Math.PI);
   context.fillStyle = bgCol;
   context.fill();
   context.strokeStyle = textCol;
@@ -111,7 +107,6 @@ const drawCircleWithText = (
   context.stroke();
 
   context.fillStyle = textCol;
-  context.font = "bold 50px Inter";
   context.textAlign = "center";
   context.textBaseline = "middle";
   context.fillText(text, x, y);

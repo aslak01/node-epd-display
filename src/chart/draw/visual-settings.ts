@@ -9,6 +9,15 @@ export const dimensions = {
   transitHeight: 280 * 0.2,
 };
 
+export const COLORS = {
+  white: "#ffffff",
+  lgrey: "#c0c0c0",
+  dgrey: "#808080",
+  black: "#000000",
+} as const;
+
+export type Colors = typeof COLORS;
+
 export type Dimensions = typeof dimensions;
 
 export const style = {
