@@ -11,7 +11,7 @@ export const dimensions = {
 
 export const COLORS = {
   white: "#ffffff",
-  lgrey: "#c0c0c0",
+  lgrey: "#a0a0a0",
   dgrey: "#808080",
   black: "#000000",
 } as const;
