@@ -20,9 +20,12 @@ export async function drawChart(mock: boolean) {
     throw new Error("no transit data");
   }
 
+  const { today: todayWeather, nextDays: nextDaysWeather } = weatherData;
+  console.log(nextDaysWeather);
+
   try {
     const buffer = await createChart(
-      weatherData,
+      todayWeather,
       transitData,
       dimensions,
       style,

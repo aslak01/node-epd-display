@@ -9,14 +9,23 @@ export type YrTSData = {
   icon?: TWeatherSymbolKey;
 };
 
+export type YrDailyData = {
+  date: Date;
+  icon: TWeatherSymbolKey;
+};
+
 export async function getWeather(
   mock = false,
   { lat = "60", lon = "11", hrs = 8 } = {},
 ) {
   const response = mock ? mockRawData : await getYrData(lat, lon);
+  const nextDays = getNextThreeDaysIcons(response);
   const trimmedResponse = getNextNHrs(response, hrs);
-  const tsData = getTSData(trimmedResponse);
-  return tsData;
+  const today = getTSData(trimmedResponse);
+  return {
+    nextDays,
+    today,
+  };
 }
 
 async function getYrData(lat: string, lon: string): Promise<Timesery[]> {
@@ -51,4 +60,31 @@ function getTSData(w: Timesery[]): YrTSData[] {
     const icon = t?.data?.next_1_hours?.summary.symbol_code;
     return icon ? { ...base, icon: icon as TWeatherSymbolKey } : base;
   });
+}
+
+function getNextThreeDaysIcons(data: Timesery[]): YrDailyData[] {
+  const now = new Date();
+
+  const todayForecast = data.find(
+    (t) =>
+      new Date(t.time) >= now && t.data.next_12_hours?.summary?.symbol_code,
+  );
+
+  const nextDaysForecasts = data
+    .filter((t) => {
+      const date = new Date(t.time);
+      return (
+        date.getHours() === 8 &&
+        date.getTime() > now.getTime() &&
+        t.data.next_12_hours?.summary?.symbol_code
+      );
+    })
+    .slice(0, 2);
+
+  return [todayForecast, ...nextDaysForecasts]
+    .filter((t): t is Timesery => !!t)
+    .map((t) => ({
+      date: new Date(t.time),
+      icon: t.data.next_12_hours?.summary.symbol_code as TWeatherSymbolKey,
+    }));
 }
