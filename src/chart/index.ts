@@ -26,6 +26,7 @@ export async function drawChart(mock: boolean) {
   try {
     const buffer = await createChart(
       todayWeather,
+      nextDaysWeather,
       transitData,
       dimensions,
       style,

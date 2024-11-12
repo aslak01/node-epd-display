@@ -1,10 +1,15 @@
 import type { CanvasRenderingContext2D } from "skia-canvas";
 import { createCanvas, type Canvas } from "@napi-rs/canvas";
 
-import type { YrTSData } from "../data/index.ts";
+import type { YrTSData, YrDailyData } from "../data/index.ts";
 import type { Dimensions, Styles } from "./visual-settings.ts";
 
-import { drawRain, drawTemps, drawTimeTicks } from "./weather/index.ts";
+import {
+  drawDayIcons,
+  drawRain,
+  drawTemps,
+  drawTimeTicks,
+} from "./weather/index.ts";
 import { drawTransitInfo } from "./transit/index.ts";
 
 import type { ParsedDeparture } from "../data/transit/index.ts";
@@ -12,7 +17,8 @@ import type { ParsedDeparture } from "../data/transit/index.ts";
 const dev = process.env.NODE_ENV === "development";
 
 export async function createChart(
-  weatherData: YrTSData[],
+  todayWeatherData: YrTSData[],
+  nextDaysWeatherData: YrDailyData[],
   transitData: ParsedDeparture[],
   dimensions: Dimensions,
   style: Styles,
@@ -27,9 +33,10 @@ export async function createChart(
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  dev && drawTimeTicks(ctx, weatherData, dims, styles);
-  drawRain(ctx, weatherData, dims, styles);
-  drawTemps(ctx, weatherData, dims, styles);
+  dev && drawTimeTicks(ctx, todayWeatherData, dims, styles);
+  drawRain(ctx, todayWeatherData, dims, styles);
+  drawTemps(ctx, todayWeatherData, dims, styles);
+  drawDayIcons(ctx, nextDaysWeatherData, dims);
 
   await drawTransitInfo(ctx, transitData, dims, styles);
 

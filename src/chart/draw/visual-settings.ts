@@ -7,6 +7,7 @@ export const dimensions = {
   left: 40,
   weatherHeight: 280 * 0.85,
   transitHeight: 280 * 0.2,
+  iconsHeight: 280 * 0.2,
 };
 
 export const COLORS = {

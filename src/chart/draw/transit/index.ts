@@ -1,4 +1,4 @@
-import { loadImage, GlobalFonts } from "@napi-rs/canvas";
+import { loadImage } from "@napi-rs/canvas";
 import type { CanvasRenderingContext2D } from "skia-canvas";
 import {
   type Colors,
@@ -17,11 +17,6 @@ export async function drawTransitInfo(
 ) {
   const { height, transitHeight } = dimensions;
 
-  GlobalFonts.registerFromPath(
-    path.join(import.meta.dirname, "..", "..", "fonts", styles.font),
-    "Inter",
-  );
-
   const trainWhite = await loadImage(
     path.join(import.meta.dirname, "/train-white.png"),
   );
@@ -36,7 +31,6 @@ export async function drawTransitInfo(
   );
 
   const ownHeight = transitHeight;
-  const infoHeight = ownHeight;
   const infoY = height - ownHeight;
   const iconSize = 50;
   const padding = 10;

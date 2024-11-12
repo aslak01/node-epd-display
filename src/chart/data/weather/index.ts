@@ -1,4 +1,8 @@
-import type { TWeatherSymbolKey } from "./weathericons";
+import {
+  convertSymbolKeyToId,
+  type TWeatherSymbolId,
+  type TWeatherSymbolKey,
+} from "./weathericons.ts";
 import { Convert, type Timesery } from "./yrQuicktype.ts";
 import { mockRawData } from "./mock.ts";
 
@@ -12,6 +16,7 @@ export type YrTSData = {
 export type YrDailyData = {
   date: Date;
   icon: TWeatherSymbolKey;
+  iconCode: TWeatherSymbolId;
 };
 
 export async function getWeather(
@@ -86,5 +91,8 @@ function getNextThreeDaysIcons(data: Timesery[]): YrDailyData[] {
     .map((t) => ({
       date: new Date(t.time),
       icon: t.data.next_12_hours?.summary.symbol_code as TWeatherSymbolKey,
+      iconCode: convertSymbolKeyToId(
+        t.data.next_12_hours?.summary.symbol_code as TWeatherSymbolKey,
+      ),
     }));
 }
