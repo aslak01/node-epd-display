@@ -5,56 +5,56 @@ import type { Dimensions, Styles } from "../visual-settings.ts";
 import { getXScale } from "./getScales.ts";
 
 export const drawTimeTicks = (
-  context: CanvasRenderingContext2D,
-  data: YrTSData[],
-  dimensions: Dimensions,
-  style: Styles,
+	context: CanvasRenderingContext2D,
+	data: YrTSData[],
+	dimensions: Dimensions,
+	style: Styles,
 ) => {
-  const xScale = getXScale(data, dimensions);
-  const xTicks = xScale.ticks(5);
+	const xScale = getXScale(data, dimensions);
+	const xTicks = xScale.ticks(5);
 
-  context.beginPath();
-  context.strokeStyle = style.tickColor;
-  context.lineWidth = style.tickWidth;
-  context.font = style.tickLabelFont;
-  context.fillStyle = style.tickLabelColor;
-  context.textAlign = "center";
-  context.textBaseline = "top";
+	context.beginPath();
+	context.strokeStyle = style.tickColor;
+	context.lineWidth = style.tickWidth;
+	context.font = style.tickLabelFont;
+	context.fillStyle = style.tickLabelColor;
+	context.textAlign = "center";
+	context.textBaseline = "top";
 
-  const longTickTimes = [0, 6, 12, 18];
+	const longTickTimes = [0, 6, 12, 18];
 
-  xTicks.forEach((tick) => {
-    const hr = tick.getHours();
-    if (longTickTimes.includes(hr)) {
-      drawLongTick(tick);
-      return;
-    }
-    drawNormalTick(tick);
-  });
+	xTicks.forEach((tick) => {
+		const hr = tick.getHours();
+		if (longTickTimes.includes(hr)) {
+			drawLongTick(tick);
+			return;
+		}
+		drawNormalTick(tick);
+	});
 
-  function drawNormalTick(tick: Date) {
-    const x = xScale(tick);
-    context.moveTo(x, dimensions.height - dimensions.bottom);
-    context.lineTo(x, dimensions.height - dimensions.bottom + style.tickLength);
-    context.stroke();
-    context.fillText(
-      formatDateLegend(tick),
-      x,
-      dimensions.height - dimensions.bottom + style.tickLength + 2,
-    );
-  }
+	function drawNormalTick(tick: Date) {
+		const x = xScale(tick);
+		context.moveTo(x, dimensions.height - dimensions.bottom);
+		context.lineTo(x, dimensions.height - dimensions.bottom + style.tickLength);
+		context.stroke();
+		context.fillText(
+			formatDateLegend(tick),
+			x,
+			dimensions.height - dimensions.bottom + style.tickLength + 2,
+		);
+	}
 
-  function drawLongTick(tick: Date) {
-    const x = xScale(tick);
-    context.moveTo(x, dimensions.top - dimensions.bottom);
-    context.lineTo(x, dimensions.height - dimensions.bottom + style.tickLength);
-    context.stroke();
-    context.fillText(
-      formatDateLegend(tick),
-      x,
-      dimensions.height - dimensions.bottom + style.tickLength + 2,
-    );
-  }
+	function drawLongTick(tick: Date) {
+		const x = xScale(tick);
+		context.moveTo(x, dimensions.top - dimensions.bottom);
+		context.lineTo(x, dimensions.height - dimensions.bottom + style.tickLength);
+		context.stroke();
+		context.fillText(
+			formatDateLegend(tick),
+			x,
+			dimensions.height - dimensions.bottom + style.tickLength + 2,
+		);
+	}
 };
 
 // const drawAxes = (context: CanvasRenderingContext2D, dimensions: Dimensions, style: Styles) => {

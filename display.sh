@@ -3,7 +3,7 @@ source "$HOME/.bashrc"
 log_with_date() {
   local log_file="$1"
   local input
-  if read -t 1 input; then
+  if read -rt 1 input; then
     {
       echo "$input"
       cat
@@ -12,6 +12,6 @@ log_with_date() {
   fi
 }
 
-cd "$HOME/node-epd-display"
+cd "$HOME/node-epd-display" || return
 
 npm run display 2> >(log_with_date "$HOME/node-epd-display/error.log")

@@ -1,15 +1,15 @@
 import isOnline from "is-online";
 
 export async function shouldMock(requested?: boolean) {
-  if (requested) {
-    return true;
-  }
+	if (requested) {
+		return true;
+	}
 
-  const online = await isOnline();
+	const online = await isOnline();
 
-  if (!online) {
-    return true;
-  }
+	if (!online) {
+		return true;
+	}
 
-  return false;
+	return false;
 }
