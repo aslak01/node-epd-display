@@ -27,13 +27,13 @@ const drawBars = (
     style.barWidth || Math.max(1, (width - left - right) / data.length - 1);
 
   data
-    .filter((d) => d.rainMax > 0)
+    .filter((d) => (d.rainMax || 0) > 0)
     .forEach((d) => {
       const x = xScale(d.date);
       const xpos = x - barWidth / 2;
 
-      const confirmedRain = Math.min(d.rain, 10);
-      const maxRain = Math.min(d.rainMax, 10);
+      const confirmedRain = Math.min(d.rain || 0, 10);
+      const maxRain = Math.min(d.rainMax || 0, 10);
       const boxHeight = (height - bottom) / 10;
 
       // Draw confirmed rain (solid boxes)
@@ -156,7 +156,7 @@ const addBarsToChart = (
   dimensions: Dimensions,
   style: Styles,
 ) => {
-  if (data.some((d) => d.rainMax > 0)) {
+  if (data.some((d) => (d.rainMax || 0) > 0)) {
     const xScale = getXScale(data, dimensions);
     const yScale = d3
       .scaleLinear()

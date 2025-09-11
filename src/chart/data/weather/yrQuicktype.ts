@@ -29,30 +29,30 @@ export type Meta = {
 };
 
 export type Units = {
-  readonly air_pressure_at_sea_level: string;
-  readonly air_temperature: string;
-  readonly air_temperature_max: string;
-  readonly air_temperature_min: string;
-  readonly air_temperature_percentile_10: string;
-  readonly air_temperature_percentile_90: string;
-  readonly cloud_area_fraction: string;
-  readonly cloud_area_fraction_high: string;
-  readonly cloud_area_fraction_low: string;
-  readonly cloud_area_fraction_medium: string;
-  readonly dew_point_temperature: string;
-  readonly fog_area_fraction: string;
-  readonly precipitation_amount: string;
-  readonly precipitation_amount_max: string;
-  readonly precipitation_amount_min: string;
-  readonly probability_of_precipitation: string;
-  readonly probability_of_thunder: string;
-  readonly relative_humidity: string;
-  readonly ultraviolet_index_clear_sky: string;
-  readonly wind_from_direction: string;
-  readonly wind_speed: string;
-  readonly wind_speed_of_gust: string;
-  readonly wind_speed_percentile_10: string;
-  readonly wind_speed_percentile_90: string;
+  readonly air_pressure_at_sea_level?: string;
+  readonly air_temperature?: string;
+  readonly air_temperature_max?: string;
+  readonly air_temperature_min?: string;
+  readonly air_temperature_percentile_10?: string;
+  readonly air_temperature_percentile_90?: string;
+  readonly cloud_area_fraction?: string;
+  readonly cloud_area_fraction_high?: string;
+  readonly cloud_area_fraction_low?: string;
+  readonly cloud_area_fraction_medium?: string;
+  readonly dew_point_temperature?: string;
+  readonly fog_area_fraction?: string;
+  readonly precipitation_amount?: string;
+  readonly precipitation_amount_max?: string;
+  readonly precipitation_amount_min?: string;
+  readonly probability_of_precipitation?: string;
+  readonly probability_of_thunder?: string;
+  readonly relative_humidity?: string;
+  readonly ultraviolet_index_clear_sky?: string;
+  readonly wind_from_direction?: string;
+  readonly wind_speed?: string;
+  readonly wind_speed_of_gust?: string;
+  readonly wind_speed_percentile_10?: string;
+  readonly wind_speed_percentile_90?: string;
 };
 
 export type Timesery = {
@@ -73,11 +73,11 @@ export type Instant = {
 
 export type Next12_Hours = {
   readonly summary: Next12_HoursSummary;
-  readonly details: Next12_HoursDetails;
+  readonly details?: Next12_HoursDetails;
 };
 
 export type Next12_HoursDetails = {
-  readonly probability_of_precipitation: number;
+  readonly probability_of_precipitation?: number;
 };
 
 export type Next12_HoursSummary = {
@@ -89,15 +89,15 @@ export type SymbolConfidence = "somewhat certain" | "uncertain" | "certain";
 
 export type Next1_Hours = {
   readonly summary: Next1_HoursSummary;
-  readonly details: Next1_HoursDetails;
+  readonly details?: Next1_HoursDetails;
 };
 
 export type Next1_HoursDetails = {
-  readonly precipitation_amount: number;
-  readonly precipitation_amount_max: number;
-  readonly precipitation_amount_min: number;
-  readonly probability_of_precipitation: number;
-  readonly probability_of_thunder: number;
+  readonly precipitation_amount?: number;
+  readonly precipitation_amount_max?: number;
+  readonly precipitation_amount_min?: number;
+  readonly probability_of_precipitation?: number;
+  readonly probability_of_thunder?: number;
 };
 
 export type Next1_HoursSummary = {
@@ -106,16 +106,16 @@ export type Next1_HoursSummary = {
 
 export type Next6_Hours = {
   readonly summary: Next1_HoursSummary;
-  readonly details: Next6_HoursDetails;
+  readonly details?: Next6_HoursDetails;
 };
 
 export type Next6_HoursDetails = {
-  readonly air_temperature_max: number;
-  readonly air_temperature_min: number;
-  readonly precipitation_amount: number;
-  readonly precipitation_amount_max: number;
-  readonly precipitation_amount_min: number;
-  readonly probability_of_precipitation: number;
+  readonly air_temperature_max?: number;
+  readonly air_temperature_min?: number;
+  readonly precipitation_amount?: number;
+  readonly precipitation_amount_max?: number;
+  readonly precipitation_amount_min?: number;
+  readonly probability_of_precipitation?: number;
 };
 
 // Converts JSON strings to/from your types
@@ -345,74 +345,74 @@ const typeMap: any = {
       {
         json: "air_pressure_at_sea_level",
         js: "air_pressure_at_sea_level",
-        typ: "",
+        typ: u(undefined, ""),
       },
-      { json: "air_temperature", js: "air_temperature", typ: "" },
-      { json: "air_temperature_max", js: "air_temperature_max", typ: "" },
-      { json: "air_temperature_min", js: "air_temperature_min", typ: "" },
+      { json: "air_temperature", js: "air_temperature", typ: u(undefined, "") },
+      { json: "air_temperature_max", js: "air_temperature_max", typ: u(undefined, "") },
+      { json: "air_temperature_min", js: "air_temperature_min", typ: u(undefined, "") },
       {
         json: "air_temperature_percentile_10",
         js: "air_temperature_percentile_10",
-        typ: "",
+        typ: u(undefined, ""),
       },
       {
         json: "air_temperature_percentile_90",
         js: "air_temperature_percentile_90",
-        typ: "",
+        typ: u(undefined, ""),
       },
-      { json: "cloud_area_fraction", js: "cloud_area_fraction", typ: "" },
+      { json: "cloud_area_fraction", js: "cloud_area_fraction", typ: u(undefined, "") },
       {
         json: "cloud_area_fraction_high",
         js: "cloud_area_fraction_high",
-        typ: "",
+        typ: u(undefined, ""),
       },
       {
         json: "cloud_area_fraction_low",
         js: "cloud_area_fraction_low",
-        typ: "",
+        typ: u(undefined, ""),
       },
       {
         json: "cloud_area_fraction_medium",
         js: "cloud_area_fraction_medium",
-        typ: "",
+        typ: u(undefined, ""),
       },
-      { json: "dew_point_temperature", js: "dew_point_temperature", typ: "" },
-      { json: "fog_area_fraction", js: "fog_area_fraction", typ: "" },
-      { json: "precipitation_amount", js: "precipitation_amount", typ: "" },
+      { json: "dew_point_temperature", js: "dew_point_temperature", typ: u(undefined, "") },
+      { json: "fog_area_fraction", js: "fog_area_fraction", typ: u(undefined, "") },
+      { json: "precipitation_amount", js: "precipitation_amount", typ: u(undefined, "") },
       {
         json: "precipitation_amount_max",
         js: "precipitation_amount_max",
-        typ: "",
+        typ: u(undefined, ""),
       },
       {
         json: "precipitation_amount_min",
         js: "precipitation_amount_min",
-        typ: "",
+        typ: u(undefined, ""),
       },
       {
         json: "probability_of_precipitation",
         js: "probability_of_precipitation",
-        typ: "",
+        typ: u(undefined, ""),
       },
-      { json: "probability_of_thunder", js: "probability_of_thunder", typ: "" },
-      { json: "relative_humidity", js: "relative_humidity", typ: "" },
+      { json: "probability_of_thunder", js: "probability_of_thunder", typ: u(undefined, "") },
+      { json: "relative_humidity", js: "relative_humidity", typ: u(undefined, "") },
       {
         json: "ultraviolet_index_clear_sky",
         js: "ultraviolet_index_clear_sky",
-        typ: "",
+        typ: u(undefined, ""),
       },
-      { json: "wind_from_direction", js: "wind_from_direction", typ: "" },
-      { json: "wind_speed", js: "wind_speed", typ: "" },
-      { json: "wind_speed_of_gust", js: "wind_speed_of_gust", typ: "" },
+      { json: "wind_from_direction", js: "wind_from_direction", typ: u(undefined, "") },
+      { json: "wind_speed", js: "wind_speed", typ: u(undefined, "") },
+      { json: "wind_speed_of_gust", js: "wind_speed_of_gust", typ: u(undefined, "") },
       {
         json: "wind_speed_percentile_10",
         js: "wind_speed_percentile_10",
-        typ: "",
+        typ: u(undefined, ""),
       },
       {
         json: "wind_speed_percentile_90",
         js: "wind_speed_percentile_90",
-        typ: "",
+        typ: u(undefined, ""),
       },
     ],
     false,
@@ -449,7 +449,7 @@ const typeMap: any = {
   Next12_Hours: o(
     [
       { json: "summary", js: "summary", typ: r("Next12_HoursSummary") },
-      { json: "details", js: "details", typ: r("Next12_HoursDetails") },
+      { json: "details", js: "details", typ: u(undefined, r("Next12_HoursDetails")) },
     ],
     false,
   ),
@@ -458,10 +458,10 @@ const typeMap: any = {
       {
         json: "probability_of_precipitation",
         js: "probability_of_precipitation",
-        typ: 3.14,
+        typ: u(undefined, 3.14),
       },
     ],
-    false,
+    3.14,
   ),
   Next12_HoursSummary: o(
     [
@@ -477,35 +477,35 @@ const typeMap: any = {
   Next1_Hours: o(
     [
       { json: "summary", js: "summary", typ: r("Next1_HoursSummary") },
-      { json: "details", js: "details", typ: r("Next1_HoursDetails") },
+      { json: "details", js: "details", typ: u(undefined, r("Next1_HoursDetails")) },
     ],
     false,
   ),
   Next1_HoursDetails: o(
     [
-      { json: "precipitation_amount", js: "precipitation_amount", typ: 3.14 },
+      { json: "precipitation_amount", js: "precipitation_amount", typ: u(undefined, 3.14) },
       {
         json: "precipitation_amount_max",
         js: "precipitation_amount_max",
-        typ: 3.14,
+        typ: u(undefined, 3.14),
       },
       {
         json: "precipitation_amount_min",
         js: "precipitation_amount_min",
-        typ: 3.14,
+        typ: u(undefined, 3.14),
       },
       {
         json: "probability_of_precipitation",
         js: "probability_of_precipitation",
-        typ: 3.14,
+        typ: u(undefined, 3.14),
       },
       {
         json: "probability_of_thunder",
         js: "probability_of_thunder",
-        typ: 3.14,
+        typ: u(undefined, 3.14),
       },
     ],
-    false,
+    3.14,
   ),
   Next1_HoursSummary: o(
     [{ json: "symbol_code", js: "symbol_code", typ: "" }],
@@ -514,32 +514,32 @@ const typeMap: any = {
   Next6_Hours: o(
     [
       { json: "summary", js: "summary", typ: r("Next1_HoursSummary") },
-      { json: "details", js: "details", typ: r("Next6_HoursDetails") },
+      { json: "details", js: "details", typ: u(undefined, r("Next6_HoursDetails")) },
     ],
     false,
   ),
   Next6_HoursDetails: o(
     [
-      { json: "air_temperature_max", js: "air_temperature_max", typ: 3.14 },
-      { json: "air_temperature_min", js: "air_temperature_min", typ: 3.14 },
-      { json: "precipitation_amount", js: "precipitation_amount", typ: 3.14 },
+      { json: "air_temperature_max", js: "air_temperature_max", typ: u(undefined, 3.14) },
+      { json: "air_temperature_min", js: "air_temperature_min", typ: u(undefined, 3.14) },
+      { json: "precipitation_amount", js: "precipitation_amount", typ: u(undefined, 3.14) },
       {
         json: "precipitation_amount_max",
         js: "precipitation_amount_max",
-        typ: 3.14,
+        typ: u(undefined, 3.14),
       },
       {
         json: "precipitation_amount_min",
         js: "precipitation_amount_min",
-        typ: 3.14,
+        typ: u(undefined, 3.14),
       },
       {
         json: "probability_of_precipitation",
         js: "probability_of_precipitation",
-        typ: 3.14,
+        typ: u(undefined, 3.14),
       },
     ],
-    false,
+    3.14,
   ),
   SymbolConfidence: ["certain", "somewhat certain", "uncertain"],
 };

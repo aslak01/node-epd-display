@@ -22,7 +22,6 @@ export async function drawChart(mock: boolean) {
   }
 
   const { today: todayWeather, nextDays: nextDaysWeather } = weatherData;
-  // console.log(nextDaysWeather);
 
   try {
     const buffer = await createChart(

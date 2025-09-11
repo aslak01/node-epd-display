@@ -37,10 +37,20 @@ export async function getWeather(
 async function getYrData(lat: string, lon: string): Promise<Timesery[]> {
   const req = await fetch(
     `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${lat}&lon=${lon}`,
+    {
+      headers: {
+        'User-Agent': 'node-epd-display/1.0 (github.com/your-repo)',
+      },
+    },
   );
+  
+  if (!req.ok) {
+    throw new Error(`HTTP error! status: ${req.status}`);
+  }
+  
   const data = await req.text();
-  const rawYrData = Convert.toRawYrData(data);
-  return rawYrData.properties.timeseries;
+  const rawJson = JSON.parse(data);
+  return rawJson.properties.timeseries;
 }
 
 function getNextNHrs(data: Timesery[], n = 10) {
@@ -58,10 +68,13 @@ function getNextNHrs(data: Timesery[], n = 10) {
 
 function getTSData(w: Timesery[]): YrTSData[] {
   return w.map((t: Timesery) => {
+    const rainAmount = t?.data?.next_1_hours?.details?.precipitation_amount || 0;
+    const rainMax = t?.data?.next_1_hours?.details?.precipitation_amount_max || rainAmount;
+    
     const base = {
       temp: t.data.instant.details.air_temperature,
-      rain: t?.data?.next_1_hours?.details.precipitation_amount || 0,
-      rainMax: t?.data?.next_1_hours?.details.precipitation_amount_max || 0,
+      rain: rainAmount,
+      rainMax: rainMax,
       date: new Date(t.time),
     };
     const icon = t?.data?.next_1_hours?.summary.symbol_code;
