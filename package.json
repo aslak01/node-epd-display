@@ -11,18 +11,18 @@
   "devDependencies": {
     "@napi-rs/canvas": "^0.1",
     "@types/d3": "^7.4",
-    "@types/node": "^22",
+    "@types/node": "^24",
     "@types/yargs": "^17",
     "d3": "^7",
-    "is-online": "^11",
+    "is-online": "^12",
     "prettier": "^3",
-    "skia-canvas": "^1",
+    "skia-canvas": "^3",
     "typescript": "^5",
-    "yargs": "^17",
+    "yargs": "^18",
     "@hono/node-server": "^1",
     "hono": "^4",
     "node-addon-api": "^8",
-    "node-gyp": "^10",
+    "node-gyp": "^11",
     "node-gyp-build": "^4"
   }
 }

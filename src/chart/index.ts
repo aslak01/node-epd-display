@@ -8,32 +8,32 @@ const lon = process.env.LON || "60";
 const hrs = 8;
 
 export async function drawChart(mock: boolean) {
-	const [weatherData, transitData] = await Promise.all([
-		getWeather(mock, { lat, lon, hrs }),
-		getTransports(mock),
-	]);
+  const [weatherData, transitData] = await Promise.all([
+    getWeather(mock, { lat, lon, hrs }),
+    getTransports(mock),
+  ]);
 
-	if (!weatherData) {
-		throw new Error("no weather data");
-	}
+  if (!weatherData) {
+    throw new Error("no weather data");
+  }
 
-	if (!transitData) {
-		throw new Error("no transit data");
-	}
+  if (!transitData) {
+    throw new Error("no transit data");
+  }
 
-	const { today: todayWeather, nextDays: nextDaysWeather } = weatherData;
-	console.log(nextDaysWeather);
+  const { today: todayWeather, nextDays: nextDaysWeather } = weatherData;
+  // console.log(nextDaysWeather);
 
-	try {
-		const buffer = await createChart(
-			todayWeather,
-			nextDaysWeather,
-			transitData,
-			dimensions,
-			style,
-		);
-		return buffer;
-	} catch (err) {
-		throw new Error(`Couldn't create buffer: ${JSON.stringify(err)}`);
-	}
+  try {
+    const buffer = await createChart(
+      todayWeather,
+      nextDaysWeather,
+      transitData,
+      dimensions,
+      style,
+    );
+    return buffer;
+  } catch (err) {
+    throw new Error(`Couldn't create buffer: ${JSON.stringify(err)}`);
+  }
 }
