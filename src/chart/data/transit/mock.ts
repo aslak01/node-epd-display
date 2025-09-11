@@ -5,14 +5,14 @@ export const mockTransportData: ParsedDeparture[] = [
     type: "train",
     name: "L1",
     departureTime: new Date("2024-09-15T19:02:56.000Z"),
-    departureMinutes: 2,
-    delayMinutes: 1,
+    departureMinutes: 10,
+    delayMinutes: 10,
   },
   {
     type: "bus",
     name: "281",
     departureTime: new Date("2024-09-15T19:05:00.000Z"),
-    departureMinutes: 5,
+    departureMinutes: 0,
   },
   {
     type: "train",

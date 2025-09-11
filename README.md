@@ -4,7 +4,13 @@ Draw something with ssr canvas (`@napi-rs/canvas`) and display it on an e-paper 
 
 This is configured to build the following weather and local transit chart, including rain and transit delays, should there be any, based on data from `yr` and `entur`, configured locally on a Raspberry Pi to refresh every 10 minutes, to always contain relevant data.
 
+Sample output
+
 ![Output image](docs/chart.png)
+
+Sample output with mock data, delays etc., big delays specify amt of minutes, small have shaded backgrounds to indicate something being up
+
+![Mocked output image](docs/mockchart.png)
 
 This project is a (not yet complete) replacement for my [previous system](https://miniweather.vercel.app) which was based on https://github.com/samsonmking/epaper.js.
 
