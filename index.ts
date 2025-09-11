@@ -98,7 +98,6 @@ async function display() {
 	console.log("initialising epd");
 	epd.init();
 	epd.init4Gray();
-	epd.clear4Gray();
 	epd.display4Gray(epdBuf);
 	epd.sleep();
 }
@@ -117,7 +116,6 @@ function display_test() {
 	console.log("initialising epd");
 	epd.init();
 	epd.init4Gray();
-	epd.clear4Gray();
 	epd.display4Gray(epdBuf);
 	epd.sleep();
 }
