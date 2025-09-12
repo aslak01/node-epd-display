@@ -7,9 +7,12 @@ on:
     branches: [main, master]
 
 jobs:
-  lint:
-    name: Lint
+  ci:
+    name: CI
     runs-on: ubuntu-latest
+    env:
+      NPM_CONFIG_UPDATE_NOTIFIER: false
+      NPM_CONFIG_FUND: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -58,123 +61,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run oxlint
-        run: pnpm run lint
-
-      - name: Run oxlint with type-aware checking
-        run: pnpm run lint:type-aware
-
-  typecheck:
-    name: Type Check
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Cache mise tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/share/mise
-            ~/.local/state/mise
-            ~/.cache/mise
-          key: ${{ runner.os }}-mise-${{ hashFiles('mise.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-mise-
-
-      - name: Setup mise
-        uses: jdx/mise-action@v2
-
-      - name: Get environment info
-        shell: bash
+      - name: Lint
         run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-          echo "NODE_VERSION=$(node --version)" >> $GITHUB_ENV
-          echo "Using pnpm store path: $(pnpm store path --silent)"
-          echo "Using Node.js version: $(node --version)"
+          pnpm run lint
+          pnpm run lint:type-aware
 
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Cache node-gyp build
-        uses: actions/cache@v4
-        with:
-          path: |
-            build
-            ~/.cache/node-gyp
-          key: ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-${{ env.NODE_VERSION }}
-          restore-keys: |
-            ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-
-            ${{ runner.os }}-node-gyp-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run TypeScript type checking
+      - name: Type check
         run: pnpm run typecheck
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    needs: [lint, typecheck]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Cache mise tools
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.local/share/mise
-            ~/.local/state/mise
-            ~/.cache/mise
-          key: ${{ runner.os }}-mise-${{ hashFiles('mise.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-mise-
-
-      - name: Setup mise
-        uses: jdx/mise-action@v2
-
-      - name: Get environment info
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-          echo "NODE_VERSION=$(node --version)" >> $GITHUB_ENV
-          echo "Using pnpm store path: $(pnpm store path --silent)"
-          echo "Using Node.js version: $(node --version)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Cache node-gyp build
-        uses: actions/cache@v4
-        with:
-          path: |
-            build
-            ~/.cache/node-gyp
-          key: ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-${{ env.NODE_VERSION }}
-          restore-keys: |
-            ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-
-            ${{ runner.os }}-node-gyp-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run tests
+      - name: Test
         run: pnpm test
         env:
           # Provide default values for environment variables used in tests
           LAT: "60.0"
           LON: "10.0"
-
