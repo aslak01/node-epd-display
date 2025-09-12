@@ -17,11 +17,13 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v2
 
-      - name: Get pnpm store directory
+      - name: Get environment info
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "NODE_VERSION=$(node --version)" >> $GITHUB_ENV
           echo "Using pnpm store path: $(pnpm store path --silent)"
+          echo "Using Node.js version: $(node --version)"
 
       - name: Cache dependencies
         uses: actions/cache@v4
@@ -30,6 +32,17 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
+      - name: Cache node-gyp build
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            ~/.cache/node-gyp
+          key: ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-${{ env.NODE_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-
+            ${{ runner.os }}-node-gyp-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -51,11 +64,13 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v2
 
-      - name: Get pnpm store directory
+      - name: Get environment info
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "NODE_VERSION=$(node --version)" >> $GITHUB_ENV
           echo "Using pnpm store path: $(pnpm store path --silent)"
+          echo "Using Node.js version: $(node --version)"
 
       - name: Cache dependencies
         uses: actions/cache@v4
@@ -64,6 +79,17 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
+      - name: Cache node-gyp build
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            ~/.cache/node-gyp
+          key: ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-${{ env.NODE_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-
+            ${{ runner.os }}-node-gyp-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -82,11 +108,13 @@ jobs:
       - name: Setup mise
         uses: jdx/mise-action@v2
 
-      - name: Get pnpm store directory
+      - name: Get environment info
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+          echo "NODE_VERSION=$(node --version)" >> $GITHUB_ENV
           echo "Using pnpm store path: $(pnpm store path --silent)"
+          echo "Using Node.js version: $(node --version)"
 
       - name: Cache dependencies
         uses: actions/cache@v4
@@ -95,6 +123,17 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
+      - name: Cache node-gyp build
+        uses: actions/cache@v4
+        with:
+          path: |
+            build
+            ~/.cache/node-gyp
+          key: ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-${{ env.NODE_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-node-gyp-${{ hashFiles('binding.gyp', 'src/napi/**', 'package.json') }}-
+            ${{ runner.os }}-node-gyp-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
