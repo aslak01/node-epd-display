@@ -6,23 +6,29 @@
     "preview": "node --env-file=.env --experimental-transform-types --disable-warning=ExperimentalWarning index.ts preview",
     "dev": "node --env-file=.env --experimental-transform-types --disable-warning=ExperimentalWarning --watch index.ts preview",
     "display": "node --env-file=.env --experimental-transform-types --disable-warning=ExperimentalWarning index.ts display",
-    "clear": "node --experimental-transform-types --disable-warning=ExperimentalWarning index.ts clear"
+    "clear": "node --experimental-transform-types --disable-warning=ExperimentalWarning index.ts clear",
+    "test": "node --experimental-transform-types --disable-warning=ExperimentalWarning --test tests/**/*.test.ts",
+    "test:watch": "node --experimental-transform-types --disable-warning=ExperimentalWarning --test --watch tests/**/*.test.ts",
+    "lint": "npx oxlint",
+    "lint:type-aware": "npx oxlint --type-aware",
+    "typecheck": "npx tsc --noEmit"
   },
   "devDependencies": {
+    "@hono/node-server": "^1",
     "@napi-rs/canvas": "^0.1",
     "@types/d3": "^7.4",
     "@types/node": "^24",
     "@types/yargs": "^17",
     "d3": "^7",
+    "hono": "^4",
     "is-online": "^12",
+    "node-addon-api": "^8",
+    "node-gyp": "^11",
+    "node-gyp-build": "^4",
+    "oxlint-tsgolint": "^0.2.0",
     "prettier": "^3",
     "skia-canvas": "^3",
     "typescript": "^5",
-    "yargs": "^18",
-    "@hono/node-server": "^1",
-    "hono": "^4",
-    "node-addon-api": "^8",
-    "node-gyp": "^11",
-    "node-gyp-build": "^4"
+    "yargs": "^18"
   }
 }
