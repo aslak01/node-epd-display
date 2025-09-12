@@ -12,7 +12,7 @@ Sample output with mock data, delays etc., big delays specify amt of minutes, sm
 
 ![Mocked output image](docs/mockchart.png)
 
-This project is a (not yet complete) replacement for my [previous system](https://miniweather.vercel.app) which was based on https://github.com/samsonmking/epaper.js.
+This project is a replacement for my [previous system](https://miniweather.vercel.app) which was based on https://github.com/samsonmking/epaper.js.
 
 `epaper.js` is a poor idea to use for something like this, since it will download an entire copy of Chrome each time it creates an image, which will run for about a year on a fresh SD card, before the SD card wears out. Before that happens it will also probably start breaking randomly because the SD card will be full. Once it has broken, it will be hard to make work again because it is tied to the particular release of Google Chrome that happened to be current when the package was last updated 2 years ago.
 
