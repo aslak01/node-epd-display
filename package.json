@@ -9,9 +9,9 @@
     "clear": "node --experimental-transform-types --disable-warning=ExperimentalWarning index.ts clear",
     "test": "node --experimental-transform-types --disable-warning=ExperimentalWarning --test tests/**/*.test.ts",
     "test:watch": "node --experimental-transform-types --disable-warning=ExperimentalWarning --test --watch tests/**/*.test.ts",
-    "lint": "npx oxlint",
-    "lint:type-aware": "npx oxlint --type-aware",
-    "typecheck": "npx tsc --noEmit"
+    "lint": "pnpm oxlint",
+    "lint:type-aware": "pnpm oxlint --type-aware",
+    "typecheck": "pnpm tsc --noEmit"
   },
   "devDependencies": {
     "@hono/node-server": "^1",
@@ -25,6 +25,7 @@
     "node-addon-api": "^8",
     "node-gyp": "^11",
     "node-gyp-build": "^4",
+    "oxlint": "^1.15.0",
     "oxlint-tsgolint": "^0.2.0",
     "prettier": "^3",
     "skia-canvas": "^3",
