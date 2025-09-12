@@ -1,4 +1,4 @@
-import type { CanvasRenderingContext2D } from "skia-canvas";
+import type { SKRSContext2D as CanvasRenderingContext2D } from "@napi-rs/canvas";
 import { createCanvas, type Canvas } from "@napi-rs/canvas";
 
 import type { YrTSData, YrDailyData } from "../data/index.ts";
@@ -36,7 +36,7 @@ export async function createChart(
 	dev && drawTimeTicks(ctx, todayWeatherData, dims, styles);
 	drawRain(ctx, todayWeatherData, dims, styles);
 	drawTemps(ctx, todayWeatherData, dims, styles);
-	drawDayIcons(ctx, nextDaysWeatherData, dims);
+	await drawDayIcons(ctx, nextDaysWeatherData, dims);
 
 	await drawTransitInfo(ctx, transitData, dims);
 

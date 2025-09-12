@@ -3,7 +3,7 @@ import {
   type TWeatherSymbolId,
   type TWeatherSymbolKey,
 } from "./weathericons.ts";
-import { Convert, type Timesery } from "./yrQuicktype.ts";
+import { type Timesery } from "./yrQuicktype.ts";
 import { mockRawData } from "./mock.ts";
 
 export type YrTSData = {
@@ -24,7 +24,7 @@ export async function getWeather(
   mock = false,
   { lat = "60", lon = "11", hrs = 8 } = {},
 ) {
-  const response = mock ? mockRawData : await getYrData(lat, lon);
+  const response = mock ? mockRawData as Timesery[] : await getYrData(lat, lon);
   const nextDays = getNextThreeDaysIcons(response);
   const trimmedResponse = getNextNHrs(response, hrs);
   const today = getTSData(trimmedResponse);

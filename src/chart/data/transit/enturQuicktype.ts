@@ -122,6 +122,7 @@ function transform(
       const typ = typs[i];
       try {
         return transform(val, typ, getProps);
+        // eslint-disable-next-line no-unused-vars
       } catch (_) { }
     }
     return invalidValue(typs, val, key, parent);
@@ -222,6 +223,7 @@ function a(typ: any) {
   return { arrayItems: typ };
 }
 
+// eslint-disable-next-line no-unused-vars
 function u(...typs: any[]) {
   return { unionMembers: typs };
 }
@@ -230,6 +232,7 @@ function o(props: any[], additional: any) {
   return { props, additional };
 }
 
+// eslint-disable-next-line no-unused-vars
 function m(additional: any) {
   return { props: [], additional };
 }

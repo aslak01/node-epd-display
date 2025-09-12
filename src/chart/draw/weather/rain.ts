@@ -1,4 +1,5 @@
-import { type CanvasRenderingContext2D } from "skia-canvas";
+// TODO: find out why the library doesn't implement this
+import { type SKRSContext2D as CanvasRenderingContext2D } from "@napi-rs/canvas";
 import type { YrTSData } from "../../data/index.ts";
 import type { Dimensions, Styles } from "../visual-settings.ts";
 import * as d3 from "d3";

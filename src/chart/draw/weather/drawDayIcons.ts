@@ -1,5 +1,5 @@
 import { loadImage } from "@napi-rs/canvas";
-import type { CanvasRenderingContext2D } from "skia-canvas";
+import type { SKRSContext2D as CanvasRenderingContext2D } from "@napi-rs/canvas";
 import path from "node:path";
 import type { Dimensions } from "../visual-settings.ts";
 import type { YrDailyData } from "../../data/weather/index.ts";

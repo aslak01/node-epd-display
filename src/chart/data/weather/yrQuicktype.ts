@@ -194,6 +194,7 @@ function transform(
       const typ = typs[i];
       try {
         return transform(val, typ, getProps);
+        // eslint-disable-next-line no-unused-vars
       } catch (_) {}
     }
     return invalidValue(typs, val, key, parent);

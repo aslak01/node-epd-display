@@ -1,9 +1,8 @@
 import { loadImage } from "@napi-rs/canvas";
-import type { CanvasRenderingContext2D } from "skia-canvas";
+import type { SKRSContext2D as CanvasRenderingContext2D } from "@napi-rs/canvas";
 import {
 	type Colors,
 	type Dimensions,
-	type Styles,
 	COLORS,
 } from "../visual-settings.ts";
 import type { ParsedDeparture } from "../../data/transit/index.ts";

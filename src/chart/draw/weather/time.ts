@@ -1,4 +1,4 @@
-import type { CanvasRenderingContext2D } from "skia-canvas";
+import type { SKRSContext2D as CanvasRenderingContext2D } from "@napi-rs/canvas";
 // import { formatDateLegend } from "../../../utils/index.ts";
 import type { YrTSData } from "../../data/index.ts";
 import type { Dimensions, Styles } from "../visual-settings.ts";
