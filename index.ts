@@ -120,7 +120,7 @@ async function display(rotate = false) {
     return;
   }
   const mock = await shouldMock();
-  const chart = await drawChart(mock, rotate);
+  const chart = await drawChart(mock, false);
   const epdBuf = createEpdBuffer(chart, dimensions, rotate);
 
   console.log("EPD Buffer size:", epdBuf.length);
