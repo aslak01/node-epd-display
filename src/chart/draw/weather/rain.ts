@@ -121,35 +121,35 @@ const drawDiagonalLines = (
   context.restore();
 };
 
-const drawAxisTicks = (
-  context: CanvasRenderingContext2D,
-  yScale: d3.ScaleLinear<number, number>,
-  dimensions: Dimensions,
-  style: Styles,
-) => {
-  const yTicks = yScale.ticks(3);
-
-  context.beginPath();
-  context.strokeStyle = style.tickColor;
-  context.lineWidth = style.tickWidth;
-  context.font = style.tickLabelFont;
-  context.fillStyle = style.tickLabelColor;
-
-  context.textAlign = "right";
-  context.textBaseline = "middle";
-  yTicks.forEach((tick) => {
-    if (tick === 0) return;
-    const y = yScale(tick);
-    context.moveTo(dimensions.left - style.tickLength - 23, y);
-    context.lineTo(dimensions.left - 23, y);
-    context.stroke();
-    context.fillText(
-      tick.toString(),
-      dimensions.left - style.tickLength - 25,
-      y,
-    );
-  });
-};
+// const drawAxisTicks = (
+//   context: CanvasRenderingContext2D,
+//   yScale: d3.ScaleLinear<number, number>,
+//   dimensions: Dimensions,
+//   style: Styles,
+// ) => {
+//   const yTicks = yScale.ticks(3);
+//
+//   context.beginPath();
+//   context.strokeStyle = style.tickColor;
+//   context.lineWidth = style.tickWidth;
+//   context.font = style.tickLabelFont;
+//   context.fillStyle = style.tickLabelColor;
+//
+//   context.textAlign = "right";
+//   context.textBaseline = "middle";
+//   yTicks.forEach((tick) => {
+//     if (tick === 0) return;
+//     const y = yScale(tick);
+//     context.moveTo(dimensions.left - style.tickLength - 23, y);
+//     context.lineTo(dimensions.left - 23, y);
+//     context.stroke();
+//     context.fillText(
+//       tick.toString(),
+//       dimensions.left - style.tickLength - 25,
+//       y,
+//     );
+//   });
+// };
 
 const addBarsToChart = (
   context: CanvasRenderingContext2D,
@@ -159,13 +159,13 @@ const addBarsToChart = (
 ) => {
   if (data.some((d) => (d.rainMax || 0) > 0)) {
     const xScale = getXScale(data, dimensions);
-    const yScale = d3
-      .scaleLinear()
-      .domain([0, 10])
-      .range([dimensions.weatherHeight - dimensions.bottom, 0]);
+    // const yScale = d3
+    //   .scaleLinear()
+    //   .domain([0, 10])
+    //   .range([dimensions.weatherHeight - dimensions.bottom, 0]);
 
     drawBars(context, data, xScale, dimensions, style);
-    drawAxisTicks(context, yScale, dimensions, style);
+    // drawAxisTicks(context, yScale, dimensions, style);
   }
 };
 
