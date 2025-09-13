@@ -16,7 +16,18 @@ import {
 import { Canvas } from "@napi-rs/canvas";
 
 void yargs(hideBin(process.argv))
-  .command("preview", "Previews on a web server", async () => await preview())
+  .command(
+    "preview",
+    "Previews on a web server",
+    (yargs) => {
+      return yargs.option("rotate", {
+        type: "boolean",
+        default: false,
+        description: "Rotate the output 180 degrees",
+      });
+    },
+    async (argv) => await preview(argv.rotate),
+  )
   .command(
     "display",
     "Displays the rendering on the pi",
@@ -29,18 +40,28 @@ void yargs(hideBin(process.argv))
     },
     async (argv) => await display(argv.rotate),
   )
-  .command("display_test", "Displays a test rendering on the pi", async () =>
-    await display_test(),
+  .command(
+    "display_test",
+    "Displays a test rendering on the pi",
+    (yargs) => {
+      return yargs.option("rotate", {
+        type: "boolean",
+        default: false,
+        description: "Rotate the output 180 degrees",
+      });
+    },
+    async (argv) => await display_test(argv.rotate),
   )
   .command("clear", "Clears the screen", async () => clear())
   .parse();
 
-async function preview() {
+async function preview(rotate = false) {
   const port = 4333;
   const app = new Hono();
   app.get("/", (ctx) => {
     const mocking = ctx.req.query("mock");
-    const src = mocking ? "/chart?mock=true" : "/chart";
+    const rotateParam = rotate ? "&rotate=true" : "";
+    const src = mocking ? `/chart?mock=true${rotateParam}` : `/chart?${rotateParam.slice(1)}`;
 
     return ctx.html(html`
       <!doctype html>
@@ -69,7 +90,8 @@ async function preview() {
     let chart: Canvas | null = null;
     try {
       const mock = await shouldMock(!!ctx.req.query("mock"));
-      chart = await drawChart(mock);
+      const shouldRotate = !!ctx.req.query("rotate") || rotate;
+      chart = await drawChart(mock, shouldRotate);
       // eslint-disable-next-line no-unused-vars
     } catch (_err) {
       throw new HTTPException(500, { message: "Could not produce chart" });
@@ -98,7 +120,7 @@ async function display(rotate = false) {
     return;
   }
   const mock = await shouldMock();
-  const chart = await drawChart(mock);
+  const chart = await drawChart(mock, rotate);
   const epdBuf = createEpdBuffer(chart, dimensions, rotate);
 
   console.log("EPD Buffer size:", epdBuf.length);
@@ -110,12 +132,12 @@ async function display(rotate = false) {
   await epd.sleep();
 }
 
-async function display_test() {
+async function display_test(rotate = false) {
   if (!(await epd.isAvailable())) {
     console.log("EPD driver not available.");
     return;
   }
-  const epdBuf = createEpdTestBuffer(dimensions);
+  const epdBuf = createEpdTestBuffer(dimensions, rotate);
 
   console.log("EPD Buffer size:", epdBuf.length);
   console.log("First 10 bytes of EPD Buffer:", epdBuf.slice(0, 10));

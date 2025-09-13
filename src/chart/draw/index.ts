@@ -22,6 +22,7 @@ export async function createChart(
 	transitData: ParsedDeparture[],
 	dimensions: Dimensions,
 	style: Styles,
+	rotate180 = false,
 ): Promise<Canvas> {
 	const dims = dimensions;
 	const styles = style;
@@ -39,6 +40,17 @@ export async function createChart(
 	await drawDayIcons(ctx, nextDaysWeatherData, dims);
 
 	await drawTransitInfo(ctx, transitData, dims);
+
+	if (rotate180) {
+		const rotatedCanvas = createCanvas(dims.width, dims.height);
+		const rotatedCtx = rotatedCanvas.getContext("2d");
+		
+		rotatedCtx.translate(dims.width, dims.height);
+		rotatedCtx.rotate(Math.PI);
+		rotatedCtx.drawImage(canvas, 0, 0);
+		
+		return rotatedCanvas;
+	}
 
 	return canvas;
 }
@@ -102,7 +114,7 @@ export function createEpdBuffer(
 	return epdBuffer;
 }
 
-export function createEpdTestBuffer(dimensions: Dimensions): Uint8Array {
+export function createEpdTestBuffer(dimensions: Dimensions, rotate180 = false): Uint8Array {
 	const { width, height } = dimensions;
 	const bufferSize = Math.floor((width * height) / 4);
 	const epdBuffer = new Uint8Array(bufferSize);
@@ -112,27 +124,35 @@ export function createEpdTestBuffer(dimensions: Dimensions): Uint8Array {
 			const bufferIndex = Math.floor((y * width + x) / 4);
 			let value = 0;
 
+			// Apply rotation to coordinates for pattern generation
+			let patternX = x;
+			let patternY = y;
+			if (rotate180) {
+				patternX = width - x - 4;
+				patternY = height - y - 1;
+			}
+
 			// Create a more distinctive pattern:
 			// - Top-left quarter: vertical stripes
 			// - Top-right quarter: horizontal stripes
 			// - Bottom-left quarter: diagonal stripes
 			// - Bottom-right quarter: checkerboard
 
-			if (y < height / 2) {
-				if (x < width / 2) {
+			if (patternY < height / 2) {
+				if (patternX < width / 2) {
 					// Vertical stripes
-					value = x % 8 < 4 ? 0xff : 0x00;
+					value = patternX % 8 < 4 ? 0xff : 0x00;
 				} else {
 					// Horizontal stripes
-					value = y % 8 < 4 ? 0xff : 0x00;
+					value = patternY % 8 < 4 ? 0xff : 0x00;
 				}
 			} else {
-				if (x < width / 2) {
+				if (patternX < width / 2) {
 					// Diagonal stripes
-					value = (x + y) % 8 < 4 ? 0xff : 0x00;
+					value = (patternX + patternY) % 8 < 4 ? 0xff : 0x00;
 				} else {
 					// Checkerboard
-					value = (x / 4 + y) % 2 === 0 ? 0xff : 0x00;
+					value = (patternX / 4 + patternY) % 2 === 0 ? 0xff : 0x00;
 				}
 			}
 

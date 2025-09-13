@@ -7,7 +7,7 @@ const lat = process.env.LAT || "11";
 const lon = process.env.LON || "60";
 const hrs = 8;
 
-export async function drawChart(mock: boolean) {
+export async function drawChart(mock: boolean, rotate180 = false) {
   const [weatherData, transitData] = await Promise.all([
     getWeather(mock, { lat, lon, hrs }),
     getTransports(mock),
@@ -30,6 +30,7 @@ export async function drawChart(mock: boolean) {
       transitData,
       dimensions,
       style,
+      rotate180,
     );
     return buffer;
   } catch (err) {
