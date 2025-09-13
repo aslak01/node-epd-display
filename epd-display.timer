@@ -1,0 +1,15 @@
+[Unit]
+Description=Timer for E-Paper Display Weather Chart
+Documentation=https://github.com/aslak01/node-epd-display
+Requires=epd-display@%i.service
+
+[Timer]
+# Run every 15 minutes
+OnCalendar=*:0/15
+# Run immediately if the system was off during a scheduled time
+Persistent=true
+# Add randomization to prevent load spikes
+RandomizedDelaySec=30
+
+[Install]
+WantedBy=timers.target

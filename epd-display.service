@@ -1,0 +1,25 @@
+[Unit]
+Description=E-Paper Display Weather Chart
+Documentation=https://github.com/aslak01/node-epd-display
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=%i
+Group=%i
+WorkingDirectory=%h/node-epd-display
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=NODE_ENV=production
+EnvironmentFile=-%h/node-epd-display/.env
+ExecStart=/usr/bin/npm run display
+StandardOutput=append:%h/node-epd-display/display.log
+StandardError=append:%h/node-epd-display/error.log
+TimeoutStartSec=60
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=%h/node-epd-display
+
+[Install]
+WantedBy=default.target
