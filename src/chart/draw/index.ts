@@ -46,14 +46,20 @@ export async function createChart(
 export function createEpdBuffer(
 	chart: Canvas,
 	dimensions: Dimensions,
+	rotate180 = false,
 ): Uint8Array {
 	const { width, height } = dimensions;
 
 	const rotatedCanvas = createCanvas(height, width);
 	const rotatedContext = rotatedCanvas.getContext("2d");
 
-	rotatedContext.translate(0, width);
-	rotatedContext.rotate(-Math.PI / 2);
+	if (rotate180) {
+		rotatedContext.translate(height, 0);
+		rotatedContext.rotate(Math.PI / 2);
+	} else {
+		rotatedContext.translate(0, width);
+		rotatedContext.rotate(-Math.PI / 2);
+	}
 	rotatedContext.drawImage(chart, 0, 0);
 
 	const imageData = rotatedContext.getImageData(0, 0, height, width);

@@ -20,7 +20,14 @@ void yargs(hideBin(process.argv))
   .command(
     "display",
     "Displays the rendering on the pi",
-    async () => await display(),
+    (yargs) => {
+      return yargs.option("rotate", {
+        type: "boolean",
+        default: false,
+        description: "Rotate the output 180 degrees",
+      });
+    },
+    async (argv) => await display(argv.rotate),
   )
   .command("display_test", "Displays a test rendering on the pi", async () =>
     await display_test(),
@@ -85,14 +92,14 @@ async function preview() {
   });
 }
 
-async function display() {
+async function display(rotate = false) {
   if (!(await epd.isAvailable())) {
     console.log("EPD driver not available.");
     return;
   }
   const mock = await shouldMock();
   const chart = await drawChart(mock);
-  const epdBuf = createEpdBuffer(chart, dimensions);
+  const epdBuf = createEpdBuffer(chart, dimensions, rotate);
 
   console.log("EPD Buffer size:", epdBuf.length);
   console.log("First 10 bytes of EPD Buffer:", epdBuf.slice(0, 10));

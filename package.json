@@ -6,6 +6,7 @@
     "preview": "node --env-file=.env --experimental-transform-types --disable-warning=ExperimentalWarning index.ts preview",
     "dev": "node --env-file=.env --experimental-transform-types --disable-warning=ExperimentalWarning --watch index.ts preview",
     "display": "node --env-file=.env --experimental-transform-types --disable-warning=ExperimentalWarning index.ts display",
+    "display:rotate": "node --env-file=.env --experimental-transform-types --disable-warning=ExperimentalWarning index.ts display --rotate",
     "clear": "node --experimental-transform-types --disable-warning=ExperimentalWarning index.ts clear",
     "test": "node --experimental-transform-types --disable-warning=ExperimentalWarning --test tests/**/*.test.ts",
     "test:watch": "node --experimental-transform-types --disable-warning=ExperimentalWarning --test --watch tests/**/*.test.ts",
