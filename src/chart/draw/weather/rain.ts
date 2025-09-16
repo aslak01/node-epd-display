@@ -27,6 +27,7 @@ const drawBars = (
   const barWidth =
     style.barWidth || Math.max(1, (width - left - right) / data.length - 1);
 
+  // console.log(data);
   data
     .filter((d) => (d.rainMax || 0) > 0)
     .forEach((d) => {
@@ -36,6 +37,7 @@ const drawBars = (
       const confirmedRain = Math.min(d.rain || 0, 10);
       const maxRain = Math.min(d.rainMax || 0, 10);
       const boxHeight = (height - bottom) / 10;
+      // console.log(d.rain, d.rainMax);
 
       // Draw confirmed rain (solid boxes)
       context.fillStyle = style.barColor;
@@ -59,7 +61,7 @@ const drawBars = (
       }
 
       // Draw potential rain (diagonal lines) from confirmed to max
-      if (maxRain > confirmedRain) {
+      if (maxRain > 0 && maxRain > confirmedRain) {
         context.strokeStyle = style.barColor;
         context.lineWidth = 2;
 
@@ -157,6 +159,7 @@ const addBarsToChart = (
   dimensions: Dimensions,
   style: Styles,
 ) => {
+  // console.log(data);
   if (data.some((d) => (d.rainMax || 0) > 0)) {
     const xScale = getXScale(data, dimensions);
     // const yScale = d3
