@@ -3,9 +3,14 @@ import {
   type EstimatedCall,
   type RawEnturData,
 } from "./enturQuicktype.ts";
+import { fetchWithTimeout } from "../../../utils/index.ts";
+
+// https://stoppested.entur.org/?stopPlaceId=NSR:StopPlace:59872
+const nsrTrainStation = process.env.NSR_TRAIN_STATION || "NSR:StopPlace:59872";
+const nsrBusStation = process.env.NSR_BUS_STATION || "NSR:StopPlace:59872";
 
 const enturQuery = `{
-stopPlaces(ids: ["NSR:StopPlace:60737", "NSR:StopPlace:3272"]) {
+stopPlaces(ids: ["${nsrTrainStation}", "${nsrBusStation}"]) {
     name
     id
     estimatedCalls {
@@ -35,9 +40,10 @@ async function fetchEnturGql(query: string): Promise<string> {
       }),
       body: JSON.stringify({ query }),
     };
-    const res = await fetch(
+    const res = await fetchWithTimeout(
       "https://api.entur.io/journey-planner/v3/graphql",
       requestOptions,
+      5000,
     );
     if (!res.ok) {
       throw new Error(`entur broke: ${res.statusText}`);
@@ -73,16 +79,21 @@ export async function getTransports(mock = false): Promise<ParsedDeparture[]> {
   return parsedData;
 }
 
-function parseEnturResponse(input: RawEnturData) {
+function parseEnturResponse(input: RawEnturData): ParsedDeparture[] {
+  const trainStationName = process.env.TRAIN_STATION_NAME || "Oslo S";
+  const busStationName = process.env.BUS_STATION_NAME || "Oslo S";
+  const trainDestination = process.env.TRAIN_DESTINATION || "Lillestrøm";
+  const busDestination = process.env.BUS_DESTINATION || "Lillestrøm";
+
   const stations = input.data.stopPlaces;
-  const trainSt = stations.find((s) => s.name === "Bondivann stasjon");
-  const busSt = stations.find((s) => s.name === "Rønningen skole");
-  if (!trainSt || !busSt) return;
+  const trainSt = stations.find((s) => s.name === trainStationName);
+  const busSt = stations.find((s) => s.name === busStationName);
+  if (!trainSt || !busSt) return [];
   const trainDepartures = trainSt.estimatedCalls
-    .filter((d) => d.destinationDisplay.frontText === "Lillestrøm")
+    .filter((d) => d.destinationDisplay.frontText === trainDestination)
     .map((d) => parseDeparture(d, "train"));
   const busDepartures = busSt.estimatedCalls
-    .filter((d) => d.destinationDisplay.frontText === "Asker")
+    .filter((d) => d.destinationDisplay.frontText === busDestination)
     .map((d) => parseDeparture(d, "bus"));
   const sortedParsedDepartures = [
     ...trainDepartures,

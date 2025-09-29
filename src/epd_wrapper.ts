@@ -28,8 +28,13 @@ export const epd = {
       console.log("EPD not available - skipping init");
       return;
     }
-    console.log("initialising epd");
-    epdDriver.init();
+    try {
+      console.log("initialising epd");
+      epdDriver.init();
+    } catch (error) {
+      console.error("Failed to initialize EPD:", error);
+      throw error;
+    }
   },
 
   async init4Gray(): Promise<void> {
@@ -38,8 +43,13 @@ export const epd = {
       console.log("EPD not available - skipping init4Gray");
       return;
     }
-    console.log("initialising 4gray mode");
-    epdDriver.init4Gray();
+    try {
+      console.log("initialising 4gray mode");
+      epdDriver.init4Gray();
+    } catch (error) {
+      console.error("Failed to initialize 4Gray mode:", error);
+      throw error;
+    }
   },
 
   async clear4Gray(): Promise<void> {
@@ -48,8 +58,13 @@ export const epd = {
       console.log("EPD not available - skipping clear4Gray");
       return;
     }
-    console.log("clearing 4gray mode");
-    epdDriver.clear4Gray();
+    try {
+      console.log("clearing 4gray mode");
+      epdDriver.clear4Gray();
+    } catch (error) {
+      console.error("Failed to clear 4Gray mode:", error);
+      throw error;
+    }
   },
 
   async display4Gray(buffer: Uint8Array): Promise<void> {
@@ -58,8 +73,13 @@ export const epd = {
       console.log("EPD not available - skipping display4Gray");
       return;
     }
-    console.log("displaying buffer on epd");
-    epdDriver.display4Gray(buffer);
+    try {
+      console.log("displaying buffer on epd");
+      epdDriver.display4Gray(buffer);
+    } catch (error) {
+      console.error("Failed to display on EPD:", error);
+      throw error;
+    }
   },
 
   async sleep(): Promise<void> {
@@ -68,7 +88,12 @@ export const epd = {
       console.log("EPD not available - skipping sleep");
       return;
     }
-    console.log("putting display to sleep");
-    epdDriver.sleep();
+    try {
+      console.log("putting display to sleep");
+      epdDriver.sleep();
+    } catch (error) {
+      console.error("Failed to put EPD to sleep:", error);
+      throw error;
+    }
   },
 };

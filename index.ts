@@ -61,7 +61,9 @@ async function preview(rotate = false) {
   app.get("/", (ctx) => {
     const mocking = ctx.req.query("mock");
     const rotateParam = rotate ? "&rotate=true" : "";
-    const src = mocking ? `/chart?mock=true${rotateParam}` : `/chart?${rotateParam.slice(1)}`;
+    const src = mocking
+      ? `/chart?mock=true${rotateParam}`
+      : `/chart?${rotateParam.slice(1)}`;
 
     return ctx.html(html`
       <!doctype html>
@@ -92,8 +94,8 @@ async function preview(rotate = false) {
       const mock = await shouldMock(!!ctx.req.query("mock"));
       const shouldRotate = !!ctx.req.query("rotate") || rotate;
       chart = await drawChart(mock, shouldRotate);
-      // eslint-disable-next-line no-unused-vars
-    } catch (_err) {
+    } catch (error) {
+      console.error("Failed to generate chart:", error);
       throw new HTTPException(500, { message: "Could not produce chart" });
     }
     if (!chart) {
