@@ -101,7 +101,7 @@ async function preview(rotate = false) {
     if (!chart) {
       throw new HTTPException(500, { message: "Could not produce chart" });
     }
-    return new Response(chart.toBuffer("image/png"), {
+    return new Response(new Uint8Array(chart.toBuffer("image/png")), {
       status: 200,
       headers: new Headers({
         "Content-Type": "image/png",
