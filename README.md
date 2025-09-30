@@ -1,6 +1,6 @@
 # node-epd-display
 
-Draw something with ssr canvas (`@napi-rs/canvas`) and display it on an e-paper display with Waveshare's C drivers. WIP
+Weather and transit chart for Waveshare 3.7" e-paper display using `@napi-rs/canvas` and native C drivers.
 
 This is configured to build the following weather and local transit chart, including rain and transit delays, should there be any, based on data from `yr` and `entur`, configured locally on a Raspberry Pi to refresh every 10 minutes, to always contain relevant data.
 
@@ -8,35 +8,36 @@ Sample output
 
 ![Output image](docs/chart.png)
 
-Sample output with mock data, delays etc., big delays specify amt of minutes, small have shaded backgrounds to indicate something being up
-
 ![Mocked output image](docs/mockchart.png)
 
-This project is a replacement for my [previous system](https://miniweather.vercel.app) which was based on https://github.com/samsonmking/epaper.js.
+This project draws an image to the waveshare screen every 10 minutes in order to contain useful transit information as well as the weather data, and is a replacement for my [previous system](https://miniweather.vercel.app) which was based on - https://github.com/samsonmking/epaper.js.
 
-`epaper.js` is a poor idea to use for something like this, since it will download an entire copy of Chrome each time it creates an image, which will run for about a year on a fresh SD card, before the SD card wears out. Before that happens it will also probably start breaking randomly because the SD card will be full. Once it has broken, it will be hard to make work again because it is tied to the particular release of Google Chrome that happened to be current when the package was last updated 2 years ago.
+The reason that a new project was necessary was that `epaper.js` downloads a full Chrome onto the Pi's SD card at every redraw, and SD cards physically wear out from repeated rewrites. This caused my previous system to fail after running for about a year. Making it worse is that `epaper.js` depends on a particular and outdated version of Google Chrome that is hard to access so that even attempting to fix it by replacing the SD card is complicated.
 
-This project instead of using the full selection of frontend web tech to render the chart, instead uses `@napi-rs/canvas` (https://github.com/Brooooooklyn/canvas) to render the graphic in memory, and send it directly to the Waveshare display without writing anything but error logs to disk.
+This project instead of using the full selection of frontend web tech to render the chart, instead uses [`@napi-rs/canvas`](https://github.com/Brooooooklyn/canvas) to render the graphic in memory, and send it directly to the Waveshare display without writing anything but error logs to disk.
 
-For now this project is very tightly coupled to my specific use case, but it should be relatively straightforward to untangle.
+Requires [Waveshare dependencies](https://www.waveshare.com/wiki/3.7inch_e-Paper_HAT_Manual#Working_With_Raspberry_Pi) for display functionality.
 
 ## Usage
 
-### Display a preview
-
 ```bash
-npm i
-npm run preview
+npm install
+npm run preview # Preview in browser
+npm run display # Display on Waweshare 3.7 hat
 ```
 
-### Display the image (on a Waveshare 3in7 Raspberry Pi hat display)
+### Scheduling
 
-Depends on binaries from the Waveshare readme: https://www.waveshare.com/wiki/3.7inch_e-Paper_HAT_Manual#Working_With_Raspberry_Pi
+There is `systemd` timer configuration included, as well as a setup script
 
 ```bash
-npm run display
+./setup-systemd.sh
 ```
 
-### Run regularly with `cron`
+It uses systemd on your user (`systemd --user`) so in order to have the script continue running if you log out you need to enable lingering
 
-cron to systemd todo
+```
+sudo loginctl enable-linger $(whoami)
+```
+
+You can also setup a CRON job running the attached `./display.sh` script if you prefer
