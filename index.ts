@@ -90,6 +90,7 @@ async function preview(rotate = false) {
 
   app.get("/chart", async (ctx) => {
     let chart: Canvas | null = null;
+
     try {
       const mock = await shouldMock(!!ctx.req.query("mock"));
       const shouldRotate = !!ctx.req.query("rotate") || rotate;
@@ -98,10 +99,14 @@ async function preview(rotate = false) {
       console.error("Failed to generate chart:", error);
       throw new HTTPException(500, { message: "Could not produce chart" });
     }
+
     if (!chart) {
       throw new HTTPException(500, { message: "Could not produce chart" });
     }
-    return new Response(new Uint8Array(chart.toBuffer("image/png")), {
+
+    const image = new Uint8Array(chart.toBuffer("image/png"));
+
+    return new Response(image, {
       status: 200,
       headers: new Headers({
         "Content-Type": "image/png",
