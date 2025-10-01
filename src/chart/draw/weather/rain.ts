@@ -2,6 +2,7 @@
 import { type SKRSContext2D as CanvasRenderingContext2D } from "@napi-rs/canvas";
 import type { YrTSData } from "../../data/index.ts";
 import type { Dimensions, Styles } from "../visual-settings.ts";
+import { RAIN_CONSTANTS } from "../visual-settings.ts";
 import * as d3 from "d3";
 import { getXScale } from "./getScales.ts";
 
@@ -27,23 +28,21 @@ const drawBars = (
   const barWidth =
     style.barWidth || Math.max(1, (width - left - right) / data.length - 1);
 
-  // console.log(data);
   data
     .filter((d) => (d.rainMax || 0) > 0)
     .forEach((d) => {
       const x = xScale(d.date);
       const xpos = x - barWidth / 2;
 
-      const confirmedRain = Math.min(d.rain || 0, 10);
-      const maxRain = Math.min(d.rainMax || 0, 10);
-      const boxHeight = (height - bottom) / 10;
-      // console.log(d.rain, d.rainMax);
+      const confirmedRain = Math.min(d.rain || 0, RAIN_CONSTANTS.maxRainValue);
+      const maxRain = Math.min(d.rainMax || 0, RAIN_CONSTANTS.maxRainValue);
+      const boxHeight = (height - bottom) / RAIN_CONSTANTS.maxRainValue;
 
       // Draw confirmed rain (solid boxes)
       context.fillStyle = style.barColor;
       for (let i = 0; i < Math.floor(confirmedRain); i++) {
         const boxY = height - bottom - (i + 1) * boxHeight;
-        context.fillRect(xpos, boxY, barWidth, boxHeight - 3);
+        context.fillRect(xpos, boxY, barWidth, boxHeight - RAIN_CONSTANTS.boxGap);
       }
 
       // Draw fractional confirmed rain
@@ -56,14 +55,14 @@ const drawBars = (
           xpos,
           boxY + boxHeight - fractionalHeight,
           barWidth,
-          fractionalHeight - 3,
+          fractionalHeight - RAIN_CONSTANTS.boxGap,
         );
       }
 
       // Draw potential rain (diagonal lines) from confirmed to max
       if (maxRain > 0 && maxRain > confirmedRain) {
         context.strokeStyle = style.barColor;
-        context.lineWidth = 2;
+        context.lineWidth = RAIN_CONSTANTS.strokeWidth;
 
         const potentialStart = confirmedRain;
         const potentialEnd = maxRain;
@@ -74,7 +73,7 @@ const drawBars = (
           i++
         ) {
           const boxY = height - bottom - (i + 1) * boxHeight;
-          drawDiagonalLines(context, xpos, boxY, barWidth, boxHeight - 3);
+          drawDiagonalLines(context, xpos, boxY, barWidth, boxHeight - RAIN_CONSTANTS.boxGap);
         }
 
         // Handle fractional potential rain at the top
@@ -88,7 +87,7 @@ const drawBars = (
             xpos,
             boxY + boxHeight - fractionalHeight,
             barWidth,
-            fractionalHeight - 3,
+            fractionalHeight - RAIN_CONSTANTS.boxGap,
           );
         }
       }
@@ -111,9 +110,8 @@ const drawDiagonalLines = (
   context.clip();
 
   context.beginPath();
-  const spacing = 4;
   // Start from negative position to ensure left edge is properly filled
-  for (let i = -height; i < width + height; i += spacing) {
+  for (let i = -height; i < width + height; i += RAIN_CONSTANTS.diagonalLineSpacing) {
     context.moveTo(x + i, y + height);
     context.lineTo(x + i + height, y);
   }
@@ -123,52 +121,15 @@ const drawDiagonalLines = (
   context.restore();
 };
 
-// const drawAxisTicks = (
-//   context: CanvasRenderingContext2D,
-//   yScale: d3.ScaleLinear<number, number>,
-//   dimensions: Dimensions,
-//   style: Styles,
-// ) => {
-//   const yTicks = yScale.ticks(3);
-//
-//   context.beginPath();
-//   context.strokeStyle = style.tickColor;
-//   context.lineWidth = style.tickWidth;
-//   context.font = style.tickLabelFont;
-//   context.fillStyle = style.tickLabelColor;
-//
-//   context.textAlign = "right";
-//   context.textBaseline = "middle";
-//   yTicks.forEach((tick) => {
-//     if (tick === 0) return;
-//     const y = yScale(tick);
-//     context.moveTo(dimensions.left - style.tickLength - 23, y);
-//     context.lineTo(dimensions.left - 23, y);
-//     context.stroke();
-//     context.fillText(
-//       tick.toString(),
-//       dimensions.left - style.tickLength - 25,
-//       y,
-//     );
-//   });
-// };
-
 const addBarsToChart = (
   context: CanvasRenderingContext2D,
   data: YrTSData[],
   dimensions: Dimensions,
   style: Styles,
 ) => {
-  // console.log(data);
   if (data.some((d) => (d.rainMax || 0) > 0)) {
     const xScale = getXScale(data, dimensions);
-    // const yScale = d3
-    //   .scaleLinear()
-    //   .domain([0, 10])
-    //   .range([dimensions.weatherHeight - dimensions.bottom, 0]);
-
     drawBars(context, data, xScale, dimensions, style);
-    // drawAxisTicks(context, yScale, dimensions, style);
   }
 };
 

@@ -5,6 +5,7 @@ import {
 } from "./weathericons.ts";
 import { type Timesery } from "./yrQuicktype.ts";
 import { mockRawData } from "./mock.ts";
+import { fetchWithTimeout } from "../../../utils/index.ts";
 
 export type YrTSData = {
   temp: number;
@@ -37,7 +38,7 @@ export async function getWeather(
 }
 
 async function getYrData(lat: string, lon: string): Promise<Timesery[]> {
-  const req = await fetch(
+  const req = await fetchWithTimeout(
     `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${lat}&lon=${lon}`,
     {
       headers: {
@@ -45,6 +46,7 @@ async function getYrData(lat: string, lon: string): Promise<Timesery[]> {
           "node-epd-display/1.0 (github.com/aslak01/node-epd-display)",
       },
     },
+    5000,
   );
 
   if (!req.ok) {
@@ -80,7 +82,6 @@ function getNextNHrs(data: Timesery[], n = 10) {
 
 function getTSData(w: Timesery[]): YrTSData[] {
   return w.map((t: Timesery) => {
-    console.table(JSON.stringify(t));
     const rainAmount =
       t?.data?.next_1_hours?.details?.precipitation_amount || 0;
     const rainMax =

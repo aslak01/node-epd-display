@@ -21,6 +21,36 @@ export type Colors = typeof COLORS;
 
 export type Dimensions = typeof dimensions;
 
+export const RAIN_CONSTANTS = {
+	maxRainValue: 10,
+	boxGap: 3,
+	diagonalLineSpacing: 4,
+	strokeWidth: 2,
+} as const;
+
+export const TEMP_CONSTANTS = {
+	circleRadius: 35,
+	fontSize: 50,
+	fontWeight: "bold",
+	radiusPadding: 10,
+	strokeWidth: 5,
+	endPointOffset: 10,
+} as const;
+
+export const TRANSIT_CONSTANTS = {
+	iconSize: 50,
+	padding: 10,
+	verticalPaddingMultiplier: 2.3,
+	cornerRadius: 15,
+	fontSize: 40,
+	fontWeight: "bold",
+	delayThreshold: 5,
+	iconTextSpacing: 0.5,
+	itemSpacing: 1.5,
+	iconVerticalOffset: -5,
+	textVerticalMultiplier: 1.3,
+} as const;
+
 export const style = {
 	font: "InterDisplay-Bold.woff2",
 	boldFont: "InterDisplay-Black.woff2",

@@ -1,6 +1,7 @@
 import type { SKRSContext2D as CanvasRenderingContext2D } from "@napi-rs/canvas";
 import type { YrTSData, DataPoint } from "../../data/index.ts";
 import type { Dimensions, Styles } from "../visual-settings.ts";
+import { TEMP_CONSTANTS } from "../visual-settings.ts";
 import * as d3 from "d3";
 import { getXScale, getYScale } from "./getScales.ts";
 
@@ -53,21 +54,20 @@ const drawEndCircles = (
 ) => {
   const startPoint = data[0];
   const endPoint = data[data.length - 1];
-  const circleRadius = 35;
 
   drawCircleWithText(
     context,
     xScale(startPoint.date),
     yScale(startPoint.value),
-    circleRadius,
+    TEMP_CONSTANTS.circleRadius,
     startPoint.value,
   );
 
   drawCircleWithText(
     context,
-    xScale(endPoint.date) - 10,
+    xScale(endPoint.date) - TEMP_CONSTANTS.endPointOffset,
     yScale(endPoint.value),
-    circleRadius,
+    TEMP_CONSTANTS.circleRadius,
     endPoint.value,
   );
 };
@@ -87,16 +87,16 @@ const drawCircleWithText = (
   let bgCol = value > 0 ? "black" : "white";
   let textCol = value > 0 ? "white" : "black";
 
-  context.font = "bold 50px Inter";
+  context.font = `${TEMP_CONSTANTS.fontWeight} ${TEMP_CONSTANTS.fontSize}px Inter`;
   const metrics = context.measureText(text);
-  const dynamicRadius = Math.max(radius, metrics.width / 2 + 10);
+  const dynamicRadius = Math.max(radius, metrics.width / 2 + TEMP_CONSTANTS.radiusPadding);
 
   context.beginPath();
   context.arc(x, y, dynamicRadius, 0, 2 * Math.PI);
   context.fillStyle = bgCol;
   context.fill();
   context.strokeStyle = textCol;
-  context.lineWidth = 5;
+  context.lineWidth = TEMP_CONSTANTS.strokeWidth;
   context.stroke();
 
   context.fillStyle = textCol;

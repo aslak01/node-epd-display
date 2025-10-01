@@ -4,6 +4,7 @@ import {
 	type Colors,
 	type Dimensions,
 	COLORS,
+	TRANSIT_CONSTANTS,
 } from "../visual-settings.ts";
 import type { ParsedDeparture } from "../../data/transit/index.ts";
 import path from "node:path";
@@ -30,30 +31,26 @@ export async function drawTransitInfo(
 
 	const ownHeight = transitHeight;
 	const infoY = height - ownHeight;
-	const iconSize = 50;
-	const padding = 10;
-	const verticalPadding = padding * 2.3;
-	const cornerRadius = 15; // Radius for rounded corners
 
-	let x = padding;
+	let x = TRANSIT_CONSTANTS.padding;
 
-	ctx.font = "bold 40px Inter";
+	ctx.font = `${TRANSIT_CONSTANTS.fontWeight} ${TRANSIT_CONSTANTS.fontSize}px Inter`;
 
 	for (const item of transitData) {
 		const delay = item.delayMinutes || 0;
 
 		const colorScheme = getColorScheme(delay);
 
-		const delayText = delay > 5 ? `(+${item.delayMinutes})` : "";
+		const delayText = delay > TRANSIT_CONSTANTS.delayThreshold ? `(+${item.delayMinutes})` : "";
 		const departureText = `${item.departureMinutes} ${delayText}`;
 		const departureWidth = ctx.measureText(departureText).width;
 
 		// Calculate background rectangle dimensions
-		const rectWidth = iconSize + padding / 2 + departureWidth + padding;
-		const rectHeight = iconSize + padding * 2;
+		const rectWidth = TRANSIT_CONSTANTS.iconSize + TRANSIT_CONSTANTS.padding * TRANSIT_CONSTANTS.iconTextSpacing + departureWidth + TRANSIT_CONSTANTS.padding;
+		const rectHeight = TRANSIT_CONSTANTS.iconSize + TRANSIT_CONSTANTS.padding * 2;
 
 		ctx.beginPath();
-		ctx.roundRect(x - padding / 2, infoY, rectWidth, rectHeight, cornerRadius);
+		ctx.roundRect(x - TRANSIT_CONSTANTS.padding / 2, infoY, rectWidth, rectHeight, TRANSIT_CONSTANTS.cornerRadius);
 		ctx.fillStyle = colorScheme.background;
 		ctx.fill();
 
@@ -66,14 +63,14 @@ export async function drawTransitInfo(
 				: colorScheme.icon === "white"
 					? busWhite
 					: busBlack;
-		ctx.drawImage(icon, x, infoY + padding - 5, iconSize, iconSize);
+		ctx.drawImage(icon, x, infoY + TRANSIT_CONSTANTS.padding + TRANSIT_CONSTANTS.iconVerticalOffset, TRANSIT_CONSTANTS.iconSize, TRANSIT_CONSTANTS.iconSize);
 
 		ctx.fillStyle = colorScheme.text;
 		ctx.textAlign = "left";
-		x += iconSize + padding / 2;
-		ctx.fillText(departureText, x, infoY + verticalPadding * 1.3);
+		x += TRANSIT_CONSTANTS.iconSize + TRANSIT_CONSTANTS.padding * TRANSIT_CONSTANTS.iconTextSpacing;
+		ctx.fillText(departureText, x, infoY + TRANSIT_CONSTANTS.padding * TRANSIT_CONSTANTS.verticalPaddingMultiplier * TRANSIT_CONSTANTS.textVerticalMultiplier);
 
-		x += departureWidth + padding * 1.5;
+		x += departureWidth + TRANSIT_CONSTANTS.padding * TRANSIT_CONSTANTS.itemSpacing;
 	}
 }
 
